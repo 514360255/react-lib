@@ -1,4 +1,5 @@
-# antd-lib
+# react-antd-lib
+react antd design library
 
 [![NPM version](https://img.shields.io/npm/v/antDesign5.svg?style=flat)](https://npmjs.org/package/antDesign5)
 [![NPM downloads](http://img.shields.io/npm/dm/antDesign5.svg?style=flat)](https://npmjs.org/package/antDesign5)
