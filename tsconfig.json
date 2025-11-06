@@ -9,7 +9,7 @@
     "paths": {
       "@@/*": [".dumi/tmp/*"],
       "antd-lib": ["src"],
-      "antd-lib/*": ["src/*", "*"]
+      "@guo514360255/antd-lib/*": ["src/*", "*"]
     }
   },
   "include": [".dumirc.ts", "src/**/*"]

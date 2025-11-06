@@ -5,8 +5,8 @@
  */
 
 import { DeleteOutlined } from '@ant-design/icons';
+import { CustomFormModalProps } from '@guo514360255/antd-lib/CustomFormModal/formModal';
 import { Button, Drawer, Form, message, Modal } from 'antd';
-import { CustomFormModalProps } from 'antd-lib/CustomFormModal/formModal';
 import cloneDeep from 'lodash/cloneDeep';
 import { FormRef } from 'rc-field-form';
 import React, {

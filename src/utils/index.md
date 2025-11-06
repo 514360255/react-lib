@@ -7,7 +7,7 @@
  */
 import { useEffect, useState } from 'react';
 import { Form, Input, Checkbox, Button, message } from 'antd';
-import { RememberPwd } from 'antd-lib';
+import { RememberPwd } from '@guo514360255/antd-lib';
 
 export default () => {
   const [form] = Form.useForm();
@@ -58,7 +58,7 @@ export default () => {
  */
 import { useEffect, useState } from 'react'
 import { Image } from 'antd';
-import { fileTransformBase64 } from 'antd-lib';
+import { fileTransformBase64 } from '@guo514360255/antd-lib';
 
 export default () => {
   
@@ -97,7 +97,7 @@ export default () => {
  */
 import { useEffect, useState } from 'react'
 import { Select } from 'antd';
-import { valueEnumTransform } from 'antd-lib';
+import { valueEnumTransform } from '@guo514360255/antd-lib';
 
 export default () => {
     const [options, setOptions] = useState([]);
@@ -121,7 +121,7 @@ export default () => {
  */
 import { useEffect, useState } from 'react'
 import { Image } from 'antd';
-import { findTreeNodeByKey } from 'antd-lib';
+import { findTreeNodeByKey } from '@guo514360255/antd-lib';
 
 export default () => {
   
@@ -141,7 +141,7 @@ export default () => {
  */
 import { useEffect, useState } from 'react'
 import { Image } from 'antd';
-import { isEmptyValue } from 'antd-lib';
+import { isEmptyValue } from '@guo514360255/antd-lib';
 
 export default () => {
 

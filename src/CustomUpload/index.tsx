@@ -4,13 +4,16 @@
  * @Description:
  */
 import { InboxOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  fileTransformBase64,
+  type FileType,
+} from '@guo514360255/antd-lib/utils/util';
 import { Image, message, Upload, UploadProps } from 'antd';
 import ImgCrop, { ImgCropProps } from 'antd-img-crop';
-import { fileTransformBase64, type FileType } from 'antd-lib/utils/util';
 import type { UploadFile } from 'antd/es/upload/interface';
 import React, { useEffect, useState } from 'react';
 
-interface CustomUploadProps {
+export interface CustomUploadProps {
   value?: UploadFile[];
   onChange?: (fileList: UploadFile[]) => void;
   uploadProps?: Omit<UploadProps, 'fileList' | 'onChange'>;

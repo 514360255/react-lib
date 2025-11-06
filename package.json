@@ -1,6 +1,6 @@
 {
-  "name": "antd-lib",
-  "version": "0.0.1",
+  "name": "@guo514360255/antd-lib",
+  "version": "1.0.1",
   "description": "react design 5 lib",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -51,6 +51,8 @@
     "access": "public"
   },
   "peerDependencies": {
+    "@ant-design/pro-table": "^3.x",
+    "antd": "^5.x",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
   },
@@ -77,6 +79,7 @@
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
     "@ant-design/pro-components": "^2.8.10",
+    "@babel/runtime": "^7.28.4",
     "@types/lodash": "^4.17.20",
     "antd": "^5.28.0",
     "antd-img-crop": "^4.27.0",

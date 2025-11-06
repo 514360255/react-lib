@@ -5,8 +5,8 @@
  * title: 基础用法
  * description: 点击上传
  */
-import {CustomUpload} from 'antd-lib';
-import {fileTransformBase64} from 'antd-lib/utils'
+import {CustomUpload} from '@guo514360255/antd-lib';
+import {fileTransformBase64} from '@guo514360255/antd-lib/utils'
 
 const fieldProps = {
   request: async (val) => {
@@ -27,8 +27,8 @@ export default () => <CustomUpload {...fieldProps} />;
  * title: 裁切图片
  * description: 配合 <a target="_blank" href="https://github.com/nanxiaobei/antd-img-crop">antd-img-crop</a> 实现上传前裁切图片。
  */
-import {CustomUpload} from 'antd-lib';
-import {fileTransformBase64} from 'antd-lib/utils'
+import {CustomUpload} from '@guo514360255/antd-lib';
+import {fileTransformBase64} from '@guo514360255/antd-lib/utils'
 
 const fieldProps = {
   isCrop: true,
@@ -49,8 +49,8 @@ export default () => <CustomUpload {...fieldProps}/>;
 /**
  * title: 拖拽上传
  */
-import {CustomUpload} from 'antd-lib';
-import {fileTransformBase64} from 'antd-lib/utils'
+import {CustomUpload} from '@guo514360255/antd-lib';
+import {fileTransformBase64} from '@guo514360255/antd-lib/utils'
 
 const fieldProps = {
   isDragger: true,

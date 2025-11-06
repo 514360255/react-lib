@@ -5,7 +5,7 @@
  * title: 基础用法
  * description: 动态引入ant design icon
  */
-import {DynamicIcon} from 'antd-lib';
+import {DynamicIcon} from '@guo514360255/antd-lib';
 import {Space} from "antd";
 
 export default () => {

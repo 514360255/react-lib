@@ -6,7 +6,7 @@
  */
 import { useRef, useState } from 'react';
 import { Button } from 'antd';
-import { CustomDetailModal } from 'antd-lib';
+import { CustomDetailModal } from '@guo514360255/antd-lib';
 
 export default () => {
   const detailModalRef = useRef(null);

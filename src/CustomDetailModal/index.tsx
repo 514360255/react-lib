@@ -4,9 +4,12 @@
  * @Description:
  */
 
+import { CustomDetailModalProps } from '@guo514360255/antd-lib/CustomDetailModal/detailModal';
+import {
+  findTreeNodeByKey,
+  isEmptyValue,
+} from '@guo514360255/antd-lib/utils/util';
 import { Button, Descriptions, Drawer, Modal, Spin } from 'antd';
-import { CustomDetailModalProps } from 'antd-lib/CustomDetailModal/detailModal';
-import { findTreeNodeByKey, isEmptyValue } from 'antd-lib/utils/util';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { CustomColumnProps } from '../compontent';
 import './index.less';

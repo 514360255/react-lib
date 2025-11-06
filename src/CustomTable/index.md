@@ -5,7 +5,7 @@
  * title: 基础用法
  */
 import { useState, useEffect } from 'react';
-import { CustomTable } from 'antd-lib';
+import { CustomTable } from '@guo514360255/antd-lib';
 
 export default () => {
   const dataSource = [{id: '1', filedName: '字段名', filedName1: '字段名1'}]
@@ -38,7 +38,7 @@ export default () => {
  * title: request请求
  */
 import { useState, useEffect } from 'react';
-import { CustomTable } from 'antd-lib';
+import { CustomTable } from '@guo514360255/antd-lib';
 
 export default () => {
 

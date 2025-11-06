@@ -7,9 +7,9 @@
 import { ProFormInstance } from '@ant-design/pro-form';
 import { ProTable } from '@ant-design/pro-table';
 import { ActionType } from '@ant-design/pro-table/es/typing';
+import CustomFormModal from '@guo514360255/antd-lib/CustomFormModal';
+import { CustomTableProps } from '@guo514360255/antd-lib/CustomTable/table';
 import { Button, message, Popconfirm } from 'antd';
-import CustomFormModal from 'antd-lib/CustomFormModal';
-import { CustomTableProps } from 'antd-lib/CustomTable/table';
 import { cloneDeep } from 'lodash';
 import React, {
   forwardRef,
@@ -42,6 +42,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       saveRequest,
       updateRequest,
       updateStateRequest,
+      handleModalData,
       ...tableProps
     } = props;
     const formRef = useRef<ProFormInstance>();
@@ -96,6 +97,13 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       0,
     );
 
+    const openModal = (record: any = {}) => {
+      // @ts-ignore
+      formModalRef.current?.open(
+        handleModalData ? handleModalData(record) : record,
+      );
+    };
+
     const handleColumns = () => {
       const newColumns = cloneDeep(columns);
       if (
@@ -149,11 +157,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
                 </Button>
               )}
               {isUpdate && (
-                <Button
-                  type="link"
-                  // @ts-ignore
-                  onClick={() => formModalRef.current?.open(record)}
-                >
+                <Button type="link" onClick={() => openModal(record)}>
                   编辑
                 </Button>
               )}
@@ -242,7 +246,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
                     type="primary"
                     key="create"
                     // @ts-ignore
-                    onClick={() => formModalRef.current?.open()}
+                    onClick={() => openModal({})}
                   >
                     {createText || '创建'}
                   </Button>,

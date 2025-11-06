@@ -6,7 +6,7 @@
  * description: 目前支持 input | radio | select | inputNumber | treeSelect | textArea
  */
 import { Form } from 'antd';
-import { FormItem } from 'antd-lib';
+import { FormItem } from '@guo514360255/antd-lib';
 
 export default () => {
   return <FormItem />
@@ -18,7 +18,7 @@ export default () => {
  * title: Form用法
  */
 import { Form } from 'antd';
-import { FormItem } from 'antd-lib';
+import { FormItem } from '@guo514360255/antd-lib';
 
 const field = [
   {

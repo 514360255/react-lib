@@ -6,7 +6,7 @@
  */
 import { useRef, useState } from 'react';
 import { Button } from 'antd';
-import { CustomModal } from 'antd-lib';
+import { CustomModal } from '@guo514360255/antd-lib';
 
 export default () => {
   const modalRef = useRef(null);
@@ -41,7 +41,7 @@ export default () => {
  */
 import { useRef, useState } from 'react';
 import { Button } from 'antd';
-import { CustomModal } from 'antd-lib';
+import { CustomModal } from '@guo514360255/antd-lib';
 
 export default () => {
   const modalRef = useRef(null);
