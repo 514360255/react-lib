@@ -11,7 +11,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import { FormRef } from 'rc-field-form';
 import React, {
   forwardRef,
-  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -52,11 +51,11 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       upload: '上传',
     };
 
-    const handleColumns = () => {
+    const handleColumns = (columns: CustomColumnProps[]) => {
       const newColumns: CustomColumnProps[] = (columns || []).filter(
         (item: CustomColumnProps) => !item.hideInForm,
       );
-      columns?.forEach((item: CustomColumnProps) => {
+      newColumns?.forEach((item: CustomColumnProps) => {
         // 所有select/treeSelect都附加搜索功能
         if (['select', 'treeSelect'].includes(item.valueType as string)) {
           item.fieldProps = {
@@ -74,9 +73,6 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
         return item;
       });
     };
-    const [newColumns, setNewColumns] = useState<CustomColumnProps[]>(
-      handleColumns(),
-    );
 
     useImperativeHandle(ref, () => ({
       async open(values: { [key: string]: any }) {
@@ -165,10 +161,6 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       }${title ? title : ''}`;
     };
 
-    useEffect(() => {
-      setNewColumns(handleColumns());
-    }, [JSON.stringify(columns)]);
-
     return (
       <>
         {messageHolder}
@@ -182,7 +174,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
           className="formContainer"
         >
           <Form size="large" layout="vertical" autoComplete="off" ref={formRef}>
-            {(newColumns || []).map((item: CustomColumnProps) => {
+            {handleColumns(columns || []).map((item: CustomColumnProps) => {
               const defaultPlaceholder = getPlaceholder(item.type, item.title);
               return item.type === 'group' ? (
                 <Form.List name={item.dataIndex} key={item.dataIndex}>

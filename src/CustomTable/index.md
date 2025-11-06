@@ -27,8 +27,13 @@ export default () => {
       ])
     }, 2000)
   }, []);
+
+  const handleModalData = (data) => {
+    setColumns(s => ([...s, {title: '字段3', dataIndex: 'filedName3'}]))
+    return data;
+  }
   
-  return <CustomTable title='标题' dataSource={dataSource} columns={columns} />
+  return <CustomTable title='标题' handleModalData={handleModalData} dataSource={dataSource} columns={columns} />
 }
 ```
 
