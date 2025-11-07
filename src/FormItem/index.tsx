@@ -4,7 +4,7 @@
  * @Description:
  */
 import { valueEnumTransform } from '@guo514360255/antd-lib/utils/util';
-import { Input, InputNumber, Radio, Select, TreeSelect } from 'antd';
+import { Checkbox, Input, InputNumber, Radio, Select, TreeSelect } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import React from 'react';
 
@@ -22,6 +22,7 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
     inputNumber: InputNumber,
     treeSelect: TreeSelect,
     textArea: Input.TextArea,
+    checkbox: Checkbox.Group,
   };
 
   const placeholder =
@@ -36,7 +37,7 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
       value={value}
       onChange={(e: any) =>
         onChange?.(
-          ['treeSelect', 'select'].includes(rest.type as string)
+          ['treeSelect', 'select', 'checkbox'].includes(rest.type as string)
             ? e
             : !rest.type ||
               ['input', 'inputNumber'].includes(rest.type as string)

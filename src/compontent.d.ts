@@ -17,6 +17,7 @@ interface CustomColumnProps extends ProColumns {
     | 'input'
     | 'radio'
     | 'select'
+    | 'checkbox'
     | 'inputNumber'
     | 'treeSelect'
     | 'textArea'

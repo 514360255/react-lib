@@ -10,15 +10,17 @@ import { ActionType } from '@ant-design/pro-table/es/typing';
 import CustomFormModal from '@guo514360255/antd-lib/CustomFormModal';
 import { CustomTableProps } from '@guo514360255/antd-lib/CustomTable/table';
 import { Button, message, Popconfirm } from 'antd';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, debounce } from 'lodash';
 import React, {
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
 } from 'react';
 import type { CustomColumnProps } from '../compontent';
 import CustomDetailModal from '../CustomDetailModal';
+import './index.less';
 
 const CustomTable = forwardRef<any, CustomTableProps>(
   (props: Omit<CustomTableProps, 'ref'>, ref) => {
@@ -51,6 +53,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     const formModalRef = useRef<ActionType>();
     const [messageApi, messageHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
+    const [scrollBar, setScrollBar] = useState(false);
 
     const delEvent = async (id: string) => {
       setLoading(true);
@@ -192,11 +195,44 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       );
     };
 
+    const getAntTableContainer = () => {
+      const tableBody = document.querySelector(
+        '#custom-pro-table .ant-table-body',
+      );
+      setTimeout(() => {
+        if (tableBody) {
+          const hasVerticalScrollbar =
+            tableBody.scrollHeight > tableBody.clientHeight;
+          console.log('ProTable 有垂直滚动条:', hasVerticalScrollbar);
+          setScrollBar(hasVerticalScrollbar);
+        }
+      });
+    };
+
+    useEffect(() => {
+      // 初始检测
+      const timer = setTimeout(getAntTableContainer, 150);
+
+      // 创建防抖后的 resize 处理函数
+      const handleResize = debounce(getAntTableContainer, 150);
+
+      // 监听窗口 resize
+      window.addEventListener('resize', handleResize);
+
+      // 清理函数：移除监听器 + 清除定时器
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('resize', handleResize);
+      };
+    }, [JSON.stringify(dataSource)]);
+
     return (
       <>
         {messageHolder}
         <ProTable
-          scroll={{ x: totalWidth, y: 1000 }}
+          id="custom-pro-table"
+          className={scrollBar ? '' : 'customer-pro-table-container'}
+          scroll={{ x: totalWidth, ...(scrollBar ? { y: 10000 } : {}) }}
           loading={loading}
           bordered
           pagination={{
@@ -220,6 +256,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
                   ...filter,
                   ...defaultQueryParams,
                 });
+                setTimeout(getAntTableContainer, 150);
                 return {
                   data: list,
                   ...data,

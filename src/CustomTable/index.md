@@ -9,12 +9,12 @@ import { CustomTable } from '@guo514360255/antd-lib';
 
 export default () => {
   const dataSource = [{id: '1', filedName: '字段名', filedName1: '字段名1'}]
-
-  const [columns, setColumns] = useState([
+  const defaultColumns = [
     {title: '字段名', dataIndex: 'filedName'},
     {title: '字段名1', dataIndex: 'filedName1'},
     {title: '操作', valueType: 'option'}
-  ])
+  ];
+  const [columns, setColumns] = useState(defaultColumns)
 
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default () => {
   }, []);
 
   const handleModalData = (data) => {
-    setColumns(s => ([...s, {title: '字段3', dataIndex: 'filedName3'}]))
+    setColumns([...defaultColumns, {title: '字段3', dataIndex: 'filedName3'}])
     return data;
   }
   
@@ -37,7 +37,6 @@ export default () => {
 }
 ```
 
-## request请求
 ```jsx
 /**
  * title: request请求

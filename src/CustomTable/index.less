@@ -1,0 +1,54 @@
+.customer-pro-table-container{
+  .ant-table-cell-fix-right{
+    right: 0 !important;
+  }
+}
+.ant-pro-layout-container{
+  height: 100vh;
+  > .ant-pro-layout-content{
+    flex: 1;
+    overflow: hidden;
+    > .ant-pro-table{
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      >.ant-pro-card:not(.ant-pro-table-search){
+        overflow: hidden;
+        >.ant-pro-card-body{
+          display: flex;
+          flex-direction: column;
+          >.ant-table-wrapper{
+            flex: 1;
+            overflow-y: hidden;
+            >.ant-spin-nested-loading{
+              height: 100%;
+              >.ant-spin-container{
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                >.ant-table{
+                  flex: 1;
+                  overflow: hidden;
+                  >.ant-table-container{
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    >.ant-table-body{
+                      flex: 1;
+                      overflow: auto !important;
+                    }
+                    >.ant-table-content{
+                      height: 100%;
+                      overflow: auto !important;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

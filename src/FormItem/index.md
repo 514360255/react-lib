@@ -3,7 +3,7 @@
 ```jsx
 /**
  * title: 基础用法
- * description: 目前支持 input | radio | select | inputNumber | treeSelect | textArea
+ * description: 目前支持 input | radio | select | inputNumber | treeSelect | textArea | checkbox
  */
 import { Form } from 'antd';
 import { FormItem } from '@guo514360255/antd-lib';
@@ -58,7 +58,19 @@ const field = [
       label: '文本域',
       type: 'textArea',
       fieldProps: { rows: 5 }
-}]
+    }, 
+    {
+      label: '复选框',
+      type: 'checkbox',
+      fieldProps: { 
+        options: [
+          { label: '选项1', value: '1' },
+          { label: '选项2', value: '2' },
+          { label: '选项3', value: '3' },
+        ]
+      }
+    }
+]
 
 export default () => {
   return (
