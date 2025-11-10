@@ -63,14 +63,16 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           messageApi.success('删除成功');
           setTimeout(() => {
             actionRef.current?.reload();
-          });
+          }, 0);
         } else {
           messageApi.error('删除接口未传入');
         }
       } catch (e) {
+        messageApi.error('删除失败');
         console.log(e);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     const updateState = async ({ id, isActive }: any) => {
@@ -84,9 +86,11 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           messageApi.error('状态修改接口未传入');
         }
       } catch (e) {
+        messageApi.error('状态修改失败');
         console.log(e);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     useImperativeHandle(ref, () => ({
@@ -203,7 +207,6 @@ const CustomTable = forwardRef<any, CustomTableProps>(
         if (tableBody) {
           const hasVerticalScrollbar =
             tableBody.scrollHeight > tableBody.clientHeight;
-          console.log('ProTable 有垂直滚动条:', hasVerticalScrollbar);
           setScrollBar(hasVerticalScrollbar);
         }
       });
@@ -224,7 +227,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
         clearTimeout(timer);
         window.removeEventListener('resize', handleResize);
       };
-    }, [JSON.stringify(dataSource)]);
+    }, [dataSource]);
 
     return (
       <>

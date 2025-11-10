@@ -10,6 +10,7 @@ import {
   isEmptyValue,
 } from '@guo514360255/antd-lib/utils/util';
 import { Button, Descriptions, Drawer, Modal, Spin } from 'antd';
+import { isNumber, isString } from 'lodash';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { CustomColumnProps } from '../compontent';
 import './index.less';
@@ -29,14 +30,21 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
     const Component = modalType[type || 'drawer'];
 
     const getDetail = async (id: string | number) => {
+      // 参数验证
+      if (!isString(id) && !isNumber(id)) {
+        console.warn('Invalid id parameter:', id);
+        return;
+      }
+      if (loading) return;
       setLoading(true);
       try {
         const data = await detailRequest(id);
         setDetail(handleDetailData ? handleDetailData(data) : data);
       } catch (e) {
-        console.log(e);
+        console.error('Failed to fetch detail:', e);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     useImperativeHandle(ref, () => ({
