@@ -3,20 +3,33 @@
  * @Date: 2025/9/3
  * @Description:
  */
-import * as Icons from '@ant-design/icons';
+import IconComponent, * as Icons from '@ant-design/icons';
 import React, { memo } from 'react';
 
 interface DynamicIconProps {
   iconName?: string;
+  component?: React.ReactNode;
   style?: React.CSSProperties;
   [key: string]: any;
 }
 
 const DynamicIcon: React.FC<DynamicIconProps> = ({
   iconName,
-  style,
+  component,
   ...props
 }) => {
+  // 自定义icon component
+  const CustomComponent = component;
+  if (CustomComponent) {
+    return (
+      <IconComponent
+        // @ts-ignore
+        component={CustomComponent as React.ReactNode}
+        {...props}
+      />
+    );
+  }
+
   if (!iconName) return null;
 
   // 尝试匹配 Outlined、Filled、TwoTone 等
@@ -32,7 +45,7 @@ const DynamicIcon: React.FC<DynamicIconProps> = ({
     return null;
   }
 
-  return <Icon style={style} {...props} />;
+  return <Icon {...props} />;
 };
 
 export default memo(DynamicIcon);
