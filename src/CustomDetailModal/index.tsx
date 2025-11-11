@@ -11,14 +11,22 @@ import {
 } from '@guo514360255/antd-lib/utils/util';
 import { Button, Descriptions, Drawer, Modal, Spin } from 'antd';
 import { isNumber, isString } from 'lodash';
+import isObject from 'lodash/isObject';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { CustomColumnProps } from '../compontent';
 import './index.less';
 
 const CustomModal = forwardRef<any, CustomDetailModalProps>(
   (props: Omit<CustomDetailModalProps, 'ref'>, ref) => {
-    const { type, columns, detailRequest, handleDetailData, title, ...other } =
-      props;
+    const {
+      type,
+      columns,
+      detailRequest,
+      handleDetailData,
+      title,
+      descProps,
+      ...other
+    } = props;
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [detail, setDetail] = useState<any>({});
@@ -62,21 +70,23 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
       setOpen(false);
     };
 
-    const handleDetailValue = (column: CustomColumnProps, value: any) => {
+    const handleDetailValue = (
+      column: CustomColumnProps,
+      value: any,
+      index: number,
+    ) => {
       if (isEmptyValue(value)) return value;
       const { fieldProps, valueEnum } = column;
       const { options } = fieldProps || {};
-      if (
-        (['select'].includes(column.type as string) &&
-          fieldProps?.mode === 'multiple') ||
-        column.type === 'radio'
-      ) {
+      if (column.render) {
+        return column.render(value, detail, index, {} as any, column as any);
+      } else if (['select', 'radio'].includes(column.type as string)) {
         const valuesEnum: any = { ...valueEnum };
         const values = `${value}`.split(',');
         const result: string[] = [];
-        if (Object.keys(valuesEnum).length > 0) {
+        if (Object.keys(valuesEnum).length > 0 && isObject(valuesEnum)) {
           values.forEach((item: any) => {
-            result.push(valuesEnum[item]?.text);
+            result.push((valuesEnum as any)[item]?.text);
           });
           return result.join(',');
         } else if (Array.isArray(options) && options.length > 0) {
@@ -108,19 +118,22 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
           onClose={close}
           className="detailContainer"
         >
-          <Descriptions column={2} bordered>
-            {columns?.map((item: CustomColumnProps) => {
-              return (
-                <React.Fragment key={item.dataIndex}>
-                  <Descriptions.Item
-                    key={item.dataIndex}
-                    label={`${item.title}`}
-                  >
-                    {handleDetailValue(item, detail[item.dataIndex])}
-                  </Descriptions.Item>
-                </React.Fragment>
-              );
-            })}
+          <Descriptions column={2} bordered {...(descProps || {})}>
+            {columns
+              ?.filter((item: CustomColumnProps) => !item.hideInDetail)
+              .map((item: CustomColumnProps, index: number) => {
+                return (
+                  <React.Fragment key={item.dataIndex}>
+                    <Descriptions.Item
+                      key={item.dataIndex}
+                      label={`${item.title}`}
+                      {...(item.fieldProps?.descriptionsItemProps || {})}
+                    >
+                      {handleDetailValue(item, detail[item.dataIndex], index)}
+                    </Descriptions.Item>
+                  </React.Fragment>
+                );
+              })}
           </Descriptions>
         </Component>
         <Spin spinning={loading} fullscreen />

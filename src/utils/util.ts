@@ -73,3 +73,31 @@ export const findTreeNodeByKey = (
 export const isEmptyValue = (value: any) => {
   return isNil(value) || value === '' || (isString(value) && isEmpty(value));
 };
+
+/**
+ * 随机数
+ * @param min
+ * @param max
+ */
+export const randomInt = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+/**
+ * 首字母转化为大写
+ * @param string
+ */
+export const capitalizeFirstLetter = (string: string | number) => {
+  return String(string).charAt(0).toUpperCase() + String(string).slice(1);
+};
+
+/**
+ * 数组类型转化为首字母大写
+ * @param strings
+ */
+export const capitalizeFirstLetters = (strings: string[]) => {
+  if (!Array.isArray(strings)) {
+    return strings;
+  }
+  return strings.map(capitalizeFirstLetter);
+};

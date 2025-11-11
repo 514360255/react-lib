@@ -5,16 +5,22 @@
  */
 import RememberPwd from './rememberPwd';
 import {
+  capitalizeFirstLetter,
+  capitalizeFirstLetters,
   fileTransformBase64,
   findTreeNodeByKey,
   isEmptyValue,
+  randomInt,
   valueEnumTransform,
 } from './util';
 
 export {
+  capitalizeFirstLetter,
+  capitalizeFirstLetters,
   fileTransformBase64,
   findTreeNodeByKey,
   isEmptyValue,
+  randomInt,
   RememberPwd,
   valueEnumTransform,
 };

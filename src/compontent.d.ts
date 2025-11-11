@@ -22,6 +22,8 @@ interface CustomColumnProps extends ProColumns {
     | 'treeSelect'
     | 'textArea'
     | 'upload'
+    | 'progress'
+    | 'tag'
     | 'group';
 
   /**
@@ -38,6 +40,12 @@ interface CustomColumnProps extends ProColumns {
    * 表单字段绑定
    */
   fieldProps?: {
+    /**
+     * 详情item参数
+     */
+    descriptionsItemProps?: {
+      [key: string]: any;
+    };
     /**
      * 图片上传接口
      * @param data

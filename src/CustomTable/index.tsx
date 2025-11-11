@@ -9,7 +9,7 @@ import { ProTable } from '@ant-design/pro-table';
 import { ActionType } from '@ant-design/pro-table/es/typing';
 import CustomFormModal from '@guo514360255/antd-lib/CustomFormModal';
 import { CustomTableProps } from '@guo514360255/antd-lib/CustomTable/table';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, message, Popconfirm, Progress } from 'antd';
 import { cloneDeep, debounce } from 'lodash';
 import React, {
   forwardRef,
@@ -45,6 +45,8 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       updateRequest,
       updateStateRequest,
       handleModalData,
+      formProps,
+      detailProps,
       ...tableProps
     } = props;
     const formRef = useRef<ProFormInstance>();
@@ -138,12 +140,27 @@ const CustomTable = forwardRef<any, CustomTableProps>(
         }
         return item;
       });
+
+      // progress
+      const progress = newColumns?.find(
+        (item: CustomColumnProps) => item.type === 'progress',
+      );
+      if (progress && !progress.render) {
+        progress.render = (_: any, record: any) => {
+          const percent = record[progress.dataIndex];
+          return (
+            <Progress percent={percent} format={(percent) => `${percent}%`} />
+          );
+        };
+      }
+
+      // 操作列
       const operation: CustomColumnProps | undefined = newColumns?.find(
         (item: CustomColumnProps) =>
           item.dataIndex === 'operation' || item.valueType === 'option',
       );
 
-      if (operation) {
+      if (operation && !operation.render) {
         operation.hideInSearch = true;
         operation.hideInDetail = true;
         if (!operation.width) {
@@ -305,6 +322,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
               item.dataIndex !== 'operation' &&
               item.valueType !== 'option',
           )}
+          {...(detailProps || {})}
         />
         <CustomFormModal
           title={title}
@@ -317,6 +335,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
               item.dataIndex !== 'operation' &&
               item.valueType !== 'option',
           )}
+          {...(formProps || {})}
         />
       </>
     );

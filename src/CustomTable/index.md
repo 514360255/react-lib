@@ -39,6 +39,224 @@ export default () => {
 
 ```jsx
 /**
+ * title: 基础用法
+ */
+import { useState, useEffect, useRef } from 'react';
+import { CustomTable, randomInt } from '@guo514360255/antd-lib';
+import { Button, Tag, Progress } from 'antd';
+import dayjs from 'dayjs';
+
+export default () => {
+  const tableRef = useRef();
+  const [columns, setColumns] = useState([
+    {
+      title: '关键词',
+      dataIndex: 'keyword',
+      hideInTable: true,
+      hideInDetail: true,
+      hideInForm: true,
+    },
+    {
+      title: '车辆ID',
+      dataIndex: 'vehicleId',
+      required: true,
+      hideInSearch: true,
+      width: 240,
+    },
+    {
+      title: '车型',
+      dataIndex: 'vehicleType',
+      required: true,
+      valueType: 'select',
+      type: 'select',
+      valueEnum: {
+        1: { text: '重载矿石车' },
+        2: { text: '集装箱转运车' },
+        3: { text: '废料运输车' },
+        4: { text: '设备转运车' },
+      },
+      width: 200,
+    },
+    {
+      title: '载重上限',
+      dataIndex: 'weightLimit',
+      hideInSearch: true,
+      width: 100,
+    },
+    {
+      title: '车辆状态',
+      dataIndex: 'status',
+      valueType: 'select',
+      type: 'select',
+      valueEnum: {
+        1: { text: '在线', color: 'green' },
+        2: { text: '离线' },
+        3: { text: '执行任务', color: 'processing' },
+        4: { text: '待命', color: 'lime' },
+        5: { text: '维保中', color: 'warning' },
+        6: { text: '异常', color: 'error' },
+      },
+      required: true,
+      width: 100,
+      render: (_, record, __, ___, column) => {
+        const { color, text } = (column.valueEnum)[record.status] || {};
+        return <Tag color={color}>{text}</Tag>;
+      },
+    },
+    {
+      title: '剩余续航',
+      dataIndex: 'remaining',
+      valueEnum: {
+        1: { text: '高（≥80%）' },
+        2: { text: '中（30%-80%）' },
+        3: { text: '低（≤30%）' },
+      },
+      width: 200,
+      hideInForm: true,
+      valueType: 'select',
+      type: 'progress',
+      render: (_, record) => {
+        const percent = record.remaining;
+        return <Progress 
+          strokeColor={percent <= 30 ? 'red' : percent > 30 && percent <= 80 ? 'green' : 'orange'} 
+          percent={percent} 
+          format={(percent) => `${percent}%`}
+        />
+      }
+    },
+    {
+      title: '作业区域',
+      dataIndex: 'area',
+      required: true,
+      valueType: 'select',
+      type: 'select',
+      valueEnum: {
+        1: { text: '采矿区' },
+        2: { text: '码头区域' },
+        3: { text: '堆场区' },
+        4: { text: '综合区域' },
+      },
+      width: 200,
+    },
+    {
+      title: '最近维保时间',
+      dataIndex: 'recentMaintenanceTime',
+      hideInSearch: true,
+      hideInForm: true,
+      valueType: 'dateTime',
+      width: 190,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createdAt',
+      hideInSearch: true,
+      hideInForm: true,
+      valueType: 'dateTime',
+      width: 190,
+    },
+    {
+      title: '创建人',
+      dataIndex: 'createdBy',
+      hideInSearch: true,
+      hideInForm: true,
+      width: 120,
+    },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      width: 220,
+      buttons: (record) => {
+        const result = [];
+        if (record.status === 3) {
+          result.push(
+            ...[
+              <Button variant="link" key="ajust" color="orange">
+                调整
+              </Button>,
+              <Button type="link" danger key="controller">
+                远程控制
+              </Button>,
+            ],
+          );
+        }
+        if (record.status === 6) {
+          result.push(
+            ...[
+              <Button variant="link" key="fault" color="green">
+                故障处理
+              </Button>,
+            ],
+          );
+        }
+        if (record.status === 5) {
+          result.push(
+            ...[
+              <Button variant="link" key="doneMaintenance" color="green">
+                完成维保
+              </Button>,
+              <Button variant="text" key="report" color="default">
+                查看报告
+              </Button>,
+            ],
+          );
+        }
+        return result;
+      },
+    },
+  ]);
+  const [dataSource, setDataSource] = useState([]);
+
+
+  useEffect(() => {
+    const data = [];
+    for (let i = 0; i < 45; i++) {
+      // vehicle id
+      const vehicleIdType = ['PORT', 'MINING', 'STACKING', 'COMPLEX'];
+      const vehicleId = `V-${vehicleIdType[randomInt(0, 3)]}-0${randomInt(10, 99)}`;
+      const vehicleType = randomInt(1, 4);
+      const weightLimit = randomInt(10, 100);
+      const status = randomInt(1, 6);
+      const remaining = randomInt(0, 100);
+      const area = randomInt(1, 4);
+      data.push({
+        id: `${i}`,
+        vehicleId,
+        vehicleType,
+        weightLimit: `${weightLimit}吨`,
+        status,
+        remaining,
+        area,
+        recentMaintenanceTime: dayjs().subtract(10, 'day').format('YYYY-MM-DD HH:mm:ss'),
+        createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        createdBy: '系统管理员',
+      });
+    }
+    setDataSource(data);
+  }, []);
+  
+  return (
+    <CustomTable
+      isUpdate={false}
+      isUpdateState={false}
+      isDelete={false}
+      title="无人车辆"
+      createText="新增车辆"
+      ref={tableRef}
+      columns={columns}
+      dataSource={dataSource}
+      toolBarRender={[<Button type="primary">批量导入</Button>]}
+      detailProps={{
+        descProps: {
+          column: 1
+        }
+      }}
+    />
+  )
+}
+```
+
+```jsx
+/**
  * title: request请求
  */
 import { useState, useEffect } from 'react';

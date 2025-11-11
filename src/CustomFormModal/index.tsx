@@ -57,7 +57,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       );
       newColumns?.forEach((item: CustomColumnProps) => {
         // 所有select/treeSelect都附加搜索功能
-        if (['select', 'treeSelect'].includes(item.valueType as string)) {
+        if (['select', 'treeSelect'].includes(item.type as string)) {
           item.fieldProps = {
             showSearch: true,
             ...(item.fieldProps || {}),

@@ -127,6 +127,16 @@ interface CustomTableProps {
   toolBarRender?: any[];
 
   /**
+   * form props
+   */
+  formProps?: { [key: string]: any };
+
+  /**
+   * detail props
+   */
+  detailProps?: { [key: string]: any };
+
+  /**
    * 其它参数
    */
   [key: string]: any;

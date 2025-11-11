@@ -48,6 +48,11 @@ interface CustomDetailModalProps {
   handleDetailData?: (data: any) => any;
 
   /**
+   * desc参数
+   */
+  descProps?: { [key: string]: any };
+
+  /**
    * 详情
    * @param data
    */
