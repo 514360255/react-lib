@@ -228,17 +228,10 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           const container: any = tableContainerRef.current?.querySelector(
             '.ant-table-container',
           );
-          if (container) {
-            if (hasVerticalScrollbar) {
-              container.classList.remove('customer-pro-table-container');
-            } else {
-              container.classList.add('customer-pro-table-container');
-            }
-            container.style.transform = 'translateZ(0)';
-            requestAnimationFrame(() => {
-              container.style.transform = '';
-            });
-          }
+          container.style.transform = 'translateZ(0)';
+          requestAnimationFrame(() => {
+            container.style.transform = '';
+          });
         }
       });
     };
@@ -264,7 +257,9 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       <div className="custom-table-container" ref={tableContainerRef}>
         {messageHolder}
         <ProTable
-          className="ant-table-container"
+          className={`ant-table-container ${
+            scrollBar ? '' : 'customer-pro-table-container'
+          }`}
           scroll={{
             x: totalWidth,
             y: 5000,
