@@ -56,6 +56,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     const [messageApi, messageHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
     const [scrollBar, setScrollBar] = useState(false);
+    const tableContainerRef = useRef<HTMLDivElement>(null);
 
     const delEvent = async (id: string) => {
       setLoading(true);
@@ -217,24 +218,37 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     };
 
     const getAntTableContainer = () => {
-      const tableBody = document.querySelector(
-        '#custom-pro-table .ant-table-body',
-      );
+      const tableContainer = tableContainerRef.current;
+      const tableBody = tableContainer?.querySelector('.ant-table-body');
       setTimeout(() => {
         if (tableBody) {
           const hasVerticalScrollbar =
             tableBody.scrollHeight > tableBody.clientHeight;
           setScrollBar(hasVerticalScrollbar);
+          const container: any = tableContainerRef.current?.querySelector(
+            '.ant-table-container',
+          );
+          if (container) {
+            if (hasVerticalScrollbar) {
+              container.classList.remove('customer-pro-table-container');
+            } else {
+              container.classList.add('customer-pro-table-container');
+            }
+            container.style.transform = 'translateZ(0)';
+            requestAnimationFrame(() => {
+              container.style.transform = '';
+            });
+          }
         }
       });
     };
 
     useEffect(() => {
       // 初始检测
-      const timer = setTimeout(getAntTableContainer, 150);
+      const timer = setTimeout(getAntTableContainer, 50);
 
       // 创建防抖后的 resize 处理函数
-      const handleResize = debounce(getAntTableContainer, 150);
+      const handleResize = debounce(getAntTableContainer, 100);
 
       // 监听窗口 resize
       window.addEventListener('resize', handleResize);
@@ -247,18 +261,29 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     }, [dataSource]);
 
     return (
-      <>
+      <div className="custom-table-container" ref={tableContainerRef}>
         {messageHolder}
         <ProTable
-          id="custom-pro-table"
-          className={scrollBar ? '' : 'customer-pro-table-container'}
-          scroll={{ x: totalWidth, ...(scrollBar ? { y: 10000 } : {}) }}
+          className="ant-table-container"
+          scroll={{
+            x: totalWidth,
+            y: 5000,
+          }}
           loading={loading}
           bordered
           pagination={{
             showSizeChanger: true,
             showQuickJumper: true,
             defaultPageSize: 10,
+            ...(Array.isArray(dataSource)
+              ? {
+                  onChange: (pageNo) => {
+                    setTimeout(() => {
+                      getAntTableContainer();
+                    }, 50);
+                  },
+                }
+              : {}),
           }}
           actionRef={actionRef}
           formRef={formRef}
@@ -276,7 +301,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
                   ...filter,
                   ...defaultQueryParams,
                 });
-                setTimeout(getAntTableContainer, 150);
+                getAntTableContainer();
                 return {
                   data: list,
                   ...data,
@@ -337,7 +362,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           )}
           {...(formProps || {})}
         />
-      </>
+      </div>
     );
   },
 );
