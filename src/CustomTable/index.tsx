@@ -233,7 +233,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
             container.style.transform = '';
           });
         }
-      });
+      }, 10);
     };
 
     useEffect(() => {
@@ -272,7 +272,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
             defaultPageSize: 10,
             ...(Array.isArray(dataSource)
               ? {
-                  onChange: (pageNo) => {
+                  onChange: () => {
                     setTimeout(() => {
                       getAntTableContainer();
                     }, 50);
