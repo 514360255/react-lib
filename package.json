@@ -1,6 +1,6 @@
 {
   "name": "@guo514360255/antd-lib",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "react design 5 lib",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
