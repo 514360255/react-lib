@@ -37,6 +37,11 @@ interface CustomFormModalProps {
   columns?: CustomColumnProps[];
 
   /**
+   * form字段列表
+   */
+  formColumns: CustomColumnProps[];
+
+  /**
    * form列表
    */
   formList?: {
@@ -70,6 +75,11 @@ interface CustomFormModalProps {
    * @param data
    */
   detailRequest?: (data: any) => any;
+
+  /**
+   * table actionRef
+   */
+  tableActionRef?: any;
 
   /**
    * 其它参数

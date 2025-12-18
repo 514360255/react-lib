@@ -6,7 +6,7 @@
 
 import { DeleteOutlined } from '@ant-design/icons';
 import { CustomFormModalProps } from '@guo514360255/antd-lib/CustomFormModal/formModal';
-import { Button, Drawer, Form, message, Modal } from 'antd';
+import { Button, Drawer, Form, message, Modal, Spin } from 'antd';
 import cloneDeep from 'lodash/cloneDeep';
 import { FormRef } from 'rc-field-form';
 import React, {
@@ -26,11 +26,13 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       type,
       onSubmit,
       columns,
+      formColumns,
       saveRequest,
       updateRequest,
       detailRequest,
       handleData,
       title,
+      tableActionRef,
       formList = {},
       ...other
     } = props;
@@ -38,6 +40,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
     const [values, setValues] = useState<any>({});
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [detailLoading, setDetailLoading] = useState(false);
     const [messageApi, messageHolder] = message.useMessage();
     const formKey = '_form_key';
     const modalType: any = {
@@ -78,20 +81,27 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       async open(values: { [key: string]: any }) {
         setOpen(true);
         if (values?.id && detailRequest) {
-          const data = await detailRequest(values.id);
-          columns?.forEach((item: CustomColumnProps) => {
-            if (item.formKey) {
-              data[`${item.dataIndex}${formKey}`] = data[item.dataIndex];
-            }
-          });
-          formRef?.current?.setFieldsValue(data || {});
-          setValues(data || {});
-          return;
+          setDetailLoading(true);
+          try {
+            const data = await detailRequest(values.id);
+            columns?.forEach((item: CustomColumnProps) => {
+              if (item.formKey) {
+                data[`${item.dataIndex}${formKey}`] = data[item.dataIndex];
+              }
+            });
+            formRef?.current?.setFieldsValue(data || {});
+            setValues(data || {});
+            return;
+          } catch (e) {
+            console.warn(e);
+          } finally {
+            setDetailLoading(false);
+          }
         }
         setTimeout(() => {
           formRef?.current?.setFieldsValue(values || {});
           setValues(values || {});
-        });
+        }, 0);
       },
     }));
 
@@ -126,6 +136,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
           onSubmit();
         }
         messageApi.success('提交成功');
+        tableActionRef?.current?.reload();
       } catch (e) {
         console.log(e, 'submit request error');
       }
@@ -162,8 +173,9 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
     };
 
     return (
-      <>
+      <div className="custom-modal-container">
         {messageHolder}
+        <Spin className="spin-contianer" fullscreen spinning={detailLoading} />
         <Component
           width={other.width || 600}
           footer={footer}
@@ -174,9 +186,13 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
           className="formContainer"
         >
           <Form size="large" layout="vertical" autoComplete="off" ref={formRef}>
-            {handleColumns(columns || []).map((item: CustomColumnProps) => {
+            {handleColumns(
+              Array.isArray(formColumns) && formColumns.length
+                ? formColumns
+                : columns || [],
+            ).map((item: CustomColumnProps) => {
               const defaultPlaceholder = getPlaceholder(item.type, item.title);
-              return item.type === 'group' ? (
+              return item.type === 'list' ? (
                 <Form.List name={item.dataIndex} key={item.dataIndex}>
                   {(fields, { add, remove }, { errors }) => (
                     <>
@@ -265,7 +281,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
             })}
           </Form>
         </Component>
-      </>
+      </div>
     );
   },
 );

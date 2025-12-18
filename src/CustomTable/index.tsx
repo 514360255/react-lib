@@ -38,6 +38,8 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       title,
       defaultQueryParams = {},
       toolBarRender = [],
+      formColumns = [],
+      formList = {},
       dataSource = null,
       deleteRequest,
       detailRequest,
@@ -96,23 +98,23 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       }
     };
 
-    useImperativeHandle(ref, () => ({
-      reload() {
-        actionRef.current?.reload();
-      },
-    }));
-
-    const totalWidth = columns?.reduce(
-      (sum: any, col: any) => sum + (col.width || 100),
-      0,
-    );
-
     const openModal = (record: any = {}) => {
       // @ts-ignore
       formModalRef.current?.open(
         handleModalData ? handleModalData(record) : record,
       );
     };
+
+    useImperativeHandle(ref, () => ({
+      reload() {
+        actionRef.current?.reload();
+      },
+      openModal,
+    }));
+
+    const totalWidth = columns
+      ?.filter((item: any) => !item.hideInTable)
+      ?.reduce((sum: any, col: any) => sum + (col.width || 100), 0);
 
     const handleColumns = () => {
       const newColumns = cloneDeep(columns);
@@ -347,8 +349,12 @@ const CustomTable = forwardRef<any, CustomTableProps>(
         <CustomFormModal
           title={title}
           ref={formModalRef}
+          tableActionRef={actionRef}
+          formList={formList}
+          formColumns={formColumns}
           saveRequest={saveRequest}
           updateRequest={updateRequest}
+          detailRequest={detailRequest}
           columns={columns.filter(
             (item: CustomColumnProps) =>
               !item.hideInForm &&

@@ -24,7 +24,7 @@ interface CustomColumnProps extends ProColumns {
     | 'upload'
     | 'progress'
     | 'tag'
-    | 'group';
+    | 'list';
 
   /**
    * 是否必填

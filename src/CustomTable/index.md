@@ -4,11 +4,25 @@
 /**
  * title: 基础用法
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CustomTable } from '@guo514360255/antd-lib';
+import {Button} from 'antd'
 
 export default () => {
-  const dataSource = [{id: '1', filedName: '字段名', filedName1: '字段名1'}]
+  const tableRef = useRef();
+  const dataSource = [{
+    id: '1', 
+    filedName: '字段名', 
+    filedName1: '字段名1',
+    fieldName2: [
+      'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+      'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg'
+    ],
+    fieldName3: [
+      {url: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', name: 1},
+      {url: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg', name: 2}
+    ]
+  }]
   const defaultColumns = [
     {title: '字段名', dataIndex: 'filedName'},
     {title: '字段名1', dataIndex: 'filedName1'},
@@ -20,20 +34,39 @@ export default () => {
   useEffect(() => {
     setTimeout(() => {
       setColumns([
-        {title: '字段名', dataIndex: 'filedName'},
-        {title: '字段名1', dataIndex: 'filedName1'},
-        {title: '字段名2', dataIndex: 'filedName2'},
-        {title: '操作', valueType: 'option'}
+        {id: 1, title: '字段名', dataIndex: 'fieldName'},
+        {id: 2, title: '字段名1', dataIndex: 'fieldName1'},
+        {id: 3, title: '字段名2', dataIndex: 'fieldName2', type: 'upload', hideInTable: true},
+        {id: 5, title: '字段名3', dataIndex: 'fieldName3', type: 'upload', hideInTable: true},
+        {id: 4, title: '操作', valueType: 'option'}
       ])
     }, 2000)
   }, []);
 
   const handleModalData = (data) => {
-    setColumns([...defaultColumns, {title: '字段3', dataIndex: 'filedName3'}])
+    setColumns([
+      ...defaultColumns, 
+      // {title: '字段3', dataIndex: 'filedName3'}
+    ])
     return data;
   }
   
-  return <CustomTable title='标题' handleModalData={handleModalData} dataSource={dataSource} columns={columns} />
+  const add = () => {
+    console.log(tableRef);
+  }
+  
+  return (
+    <>
+      <Button onClick={add}>添加</Button>
+      <CustomTable
+        ref={tableRef}
+        title='标题'
+        handleModalData={handleModalData}
+        dataSource={dataSource}
+        columns={columns}
+      />
+    </>
+  )
 }
 ```
 

@@ -3,6 +3,7 @@
  * @Date: 2025/11/4
  * @Description:
  */
+import { CustomColumnProps } from '@guo514360255/antd-lib/src';
 import { GetProp, UploadProps } from 'antd';
 import { isEmpty, isNil, isString } from 'lodash';
 import isFinite from 'lodash/isFinite';
@@ -100,4 +101,26 @@ export const capitalizeFirstLetters = (strings: string[]) => {
     return strings;
   }
   return strings.map(capitalizeFirstLetter);
+};
+
+/**
+ * 处理字段属性
+ * @param setColumns
+ * @param code
+ * @param fn
+ */
+export const handleColumnFieldProps = (
+  setColumns: any,
+  code: string,
+  fn: (data: any) => void,
+) => {
+  setColumns((s: CustomColumnProps[]) => {
+    const column: CustomColumnProps | undefined = s.find(
+      (item: any) => item.dataIndex === code,
+    );
+    if (column && column.fieldProps) {
+      fn(column);
+    }
+    return s;
+  });
 };

@@ -63,6 +63,11 @@ interface CustomTableProps {
   columns: ProColumns[];
 
   /**
+   * form字段列表
+   */
+  formColumns: ProColumns[];
+
+  /**
    * record key
    */
   rowKey?: string;
@@ -135,6 +140,13 @@ interface CustomTableProps {
    * detail props
    */
   detailProps?: { [key: string]: any };
+
+  /**
+   * 表单组
+   */
+  formList?: {
+    [key: string]: any;
+  };
 
   /**
    * 其它参数

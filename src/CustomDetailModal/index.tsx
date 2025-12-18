@@ -9,7 +9,7 @@ import {
   findTreeNodeByKey,
   isEmptyValue,
 } from '@guo514360255/antd-lib/utils/util';
-import { Button, Descriptions, Drawer, Modal, Spin } from 'antd';
+import { Descriptions, Drawer, Image, Modal, Spin } from 'antd';
 import { isNumber, isString } from 'lodash';
 import isObject from 'lodash/isObject';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
@@ -101,24 +101,40 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
       return value;
     };
 
-    const footer = [
-      <Button key="cancel" size="large" onClick={close}>
-        确定
-      </Button>,
-    ];
+    const DescImage = ({ data }: any) => {
+      if (!data) return data;
+      let list: any[] = data;
+      if (typeof data === 'string') {
+        list = data.split(',');
+      }
+      return (
+        <Image.PreviewGroup>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            {list.map((item: any, index: number) => (
+              <Image
+                key={index}
+                width={100}
+                src={item.url || item}
+                alt={item.name || item}
+                style={{ marginRight: 10 }}
+              />
+            ))}
+          </div>
+        </Image.PreviewGroup>
+      );
+    };
 
     return (
       <>
         <Component
           width={other.width || 600}
-          footer={footer}
           title={`${title || ''}详情`}
           {...other}
           open={open}
           onClose={close}
           className="detailContainer"
         >
-          <Descriptions column={2} bordered {...(descProps || {})}>
+          <Descriptions column={1} bordered {...(descProps || {})}>
             {columns
               ?.filter((item: CustomColumnProps) => !item.hideInDetail)
               .map((item: CustomColumnProps, index: number) => {
@@ -129,7 +145,15 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
                       label={`${item.title}`}
                       {...(item.fieldProps?.descriptionsItemProps || {})}
                     >
-                      {handleDetailValue(item, detail[item.dataIndex], index)}
+                      {item.type === 'upload' ? (
+                        <DescImage data={detail[item.dataIndex]} />
+                      ) : (
+                        handleDetailValue(
+                          item,
+                          detail[item.dataIndex],
+                          index,
+                        ) || '-'
+                      )}
                     </Descriptions.Item>
                   </React.Fragment>
                 );
