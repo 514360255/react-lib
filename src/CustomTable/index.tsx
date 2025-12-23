@@ -10,7 +10,8 @@ import { ActionType } from '@ant-design/pro-table/es/typing';
 import CustomFormModal from '@guo514360255/antd-lib/CustomFormModal';
 import { CustomTableProps } from '@guo514360255/antd-lib/CustomTable/table';
 import { Button, message, Popconfirm, Progress } from 'antd';
-import { cloneDeep, debounce } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
 import React, {
   forwardRef,
   useEffect,
@@ -100,9 +101,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
 
     const openModal = (record: any = {}) => {
       // @ts-ignore
-      formModalRef.current?.open(
-        handleModalData ? handleModalData(record) : record,
-      );
+      formModalRef.current?.open(record);
     };
 
     useImperativeHandle(ref, () => ({
@@ -110,6 +109,10 @@ const CustomTable = forwardRef<any, CustomTableProps>(
         actionRef.current?.reload();
       },
       openModal,
+      getFormRef() {
+        // @ts-ignore
+        return formModalRef?.current?.getFormRef();
+      },
     }));
 
     const totalWidth = columns
@@ -355,6 +358,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           saveRequest={saveRequest}
           updateRequest={updateRequest}
           detailRequest={detailRequest}
+          handleModalData={handleModalData}
           columns={columns.filter(
             (item: CustomColumnProps) =>
               !item.hideInForm &&

@@ -5,11 +5,12 @@
  * title: 基础用法
  */
 import { useState, useEffect, useRef } from 'react';
-import { CustomTable } from '@guo514360255/antd-lib';
-import {Button} from 'antd'
+import { CustomTable, useFormData } from '@guo514360255/antd-lib';
+import { Button } from 'antd'
 
 export default () => {
   const tableRef = useRef();
+  const { setFieldValue } = useFormData();
   const dataSource = [{
     id: '1', 
     filedName: '字段名', 
@@ -34,8 +35,38 @@ export default () => {
   useEffect(() => {
     setTimeout(() => {
       setColumns([
-        {id: 1, title: '字段名', dataIndex: 'fieldName'},
-        {id: 2, title: '字段名1', dataIndex: 'fieldName1'},
+        {
+          title: '复选框',
+          dataIndex: 'checkbox',
+          type: 'checkbox',
+          valueEnum: {
+            0: { text: '否' },
+            1: { text: '是' },
+          },
+          fieldProps: {
+            options: [{label: '男', value: 1}],
+          }
+        },
+        {
+          id: 1, 
+          title: '字段名', 
+          dataIndex: 'fieldName', 
+          type: 'select',
+          valueType: 'select',
+          fieldProps: {
+            options: [{label: '男', value: 1}, {label: '女', value: 0}],
+            onChange: val => {
+              setTimeout(() => {
+                setColumns(s => {
+                  const col = s.find(item => item.dataIndex === 'fieldName1');
+                  col.valueEnum = {1: {text: '1'}, 2: {text: '2'}};
+                  return [...s];
+                })
+              }, 3000)
+            }
+          }
+        },
+        {id: 2, title: '字段名1', dataIndex: 'fieldName1', type: 'select', fieldProps: {}},
         {id: 3, title: '字段名2', dataIndex: 'fieldName2', type: 'upload', hideInTable: true},
         {id: 5, title: '字段名3', dataIndex: 'fieldName3', type: 'upload', hideInTable: true},
         {id: 4, title: '操作', valueType: 'option'}
@@ -44,10 +75,13 @@ export default () => {
   }, []);
 
   const handleModalData = (data) => {
-    setColumns([
-      ...defaultColumns, 
-      // {title: '字段3', dataIndex: 'filedName3'}
-    ])
+    data.checkbox = [1];
+    data.fieldName = [1];
+    data.fieldName2 = data.fieldName2?.map(item => ({url: item}));
+    // setColumns([
+    //   ...defaultColumns,
+    //   // {title: '字段3', dataIndex: 'filedName3'}
+    // ])
     return data;
   }
   
@@ -64,6 +98,21 @@ export default () => {
         handleModalData={handleModalData}
         dataSource={dataSource}
         columns={columns}
+        detailRequest={() => {
+          return {
+            id: '1',
+            filedName: 1,
+            filedName1: '字段名1',
+            fieldName2: [
+              'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+              'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg'
+            ],
+            fieldName3: [
+              {url: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', name: 1},
+              {url: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg', name: 2}
+            ]
+          }
+        }}
       />
     </>
   )

@@ -5,8 +5,10 @@
  */
 import { CustomColumnProps } from '@guo514360255/antd-lib/src';
 import { GetProp, UploadProps } from 'antd';
-import { isEmpty, isNil, isString } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import isFinite from 'lodash/isFinite';
+import isNil from 'lodash/isNil';
+import isString from 'lodash/isString';
 
 export type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 

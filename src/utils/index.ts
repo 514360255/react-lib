@@ -3,6 +3,7 @@
  * @Date: 2025/11/4
  * @Description:
  */
+import { buildTree } from './buildTree';
 import RememberPwd from './rememberPwd';
 import {
   capitalizeFirstLetter,
@@ -16,6 +17,7 @@ import {
 } from './util';
 
 export {
+  buildTree,
   capitalizeFirstLetter,
   capitalizeFirstLetters,
   fileTransformBase64,

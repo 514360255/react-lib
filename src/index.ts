@@ -15,4 +15,5 @@ export { default as DynamicIcon } from './DynamicIcon';
 export { default as FormItem } from './FormItem';
 
 export * from './hooks';
+export * from './store';
 export * from './utils';

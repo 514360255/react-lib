@@ -6,15 +6,18 @@
 
 import { DeleteOutlined } from '@ant-design/icons';
 import { CustomFormModalProps } from '@guo514360255/antd-lib/CustomFormModal/formModal';
+import { useFormData } from '@guo514360255/antd-lib/store/useFormData';
 import { Button, Drawer, Form, message, Modal, Spin } from 'antd';
 import cloneDeep from 'lodash/cloneDeep';
 import { FormRef } from 'rc-field-form';
 import React, {
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
 } from 'react';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 import { CustomColumnProps } from '../compontent';
 import CustomUpload from '../CustomUpload';
 import FormItem from '../FormItem';
@@ -34,10 +37,11 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       title,
       tableActionRef,
       formList = {},
+      handleModalData,
       ...other
     } = props;
     const formRef: React.LegacyRef<FormRef> | undefined = useRef<any>();
-    const [values, setValues] = useState<any>({});
+    const { formValues, setFieldValues } = useFormData();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [detailLoading, setDetailLoading] = useState(false);
@@ -89,8 +93,11 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
                 data[`${item.dataIndex}${formKey}`] = data[item.dataIndex];
               }
             });
-            formRef?.current?.setFieldsValue(data || {});
-            setValues(data || {});
+            const newData = handleModalData
+              ? handleModalData(data || {})
+              : data || {};
+            setFieldValues(newData);
+            formRef.current?.setFieldsValue(formValues || {});
             return;
           } catch (e) {
             console.warn(e);
@@ -99,9 +106,15 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
           }
         }
         setTimeout(() => {
-          formRef?.current?.setFieldsValue(values || {});
-          setValues(values || {});
+          const newData = handleModalData
+            ? handleModalData(values || {})
+            : values || {};
+          setFieldValues(newData);
+          formRef.current?.setFieldsValue(formValues || {});
         }, 0);
+      },
+      getFormRef() {
+        return formRef.current;
       },
     }));
 
@@ -109,7 +122,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       setLoading(true);
       try {
         const formData = await formRef.current?.validateFields();
-        const data = { ...values, ...formData };
+        const data = { ...formValues, ...formData };
         let result: any = {};
         for (const key in data) {
           if (new RegExp(formKey).test(key)) {
@@ -121,7 +134,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
         if (handleData) {
           result = handleData(result);
         }
-        if (values.id) {
+        if (formValues.id) {
           if (updateRequest) {
             await updateRequest(result);
           }
@@ -167,10 +180,21 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
     ];
 
     const getPlaceholder = (type: string | undefined, title: any) => {
-      return `请${
-        placeholder[(type as string) || 'input'] || placeholder.default
-      }${title ? title : ''}`;
+      return `请${placeholder[(type as string) || 'input'] || '选择'}${
+        title ? title : ''
+      }`;
     };
+
+    // 深度监听form数据
+    useDeepCompareEffect(() => {
+      formRef.current?.setFieldsValue(formValues || {});
+    }, [formValues]);
+
+    useEffect(() => {
+      return () => {
+        setFieldValues({});
+      };
+    }, []);
 
     return (
       <div className="custom-modal-container">
@@ -179,13 +203,19 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
         <Component
           width={other.width || 600}
           footer={footer}
-          title={`${!!values.id ? '编辑' : '新增'}${title || ''}`}
+          title={`${!!formValues.id ? '编辑' : '新增'}${title || ''}`}
           {...other}
           open={open}
           onClose={close}
           className="formContainer"
         >
-          <Form size="large" layout="vertical" autoComplete="off" ref={formRef}>
+          <Form
+            size="large"
+            layout="vertical"
+            autoComplete="off"
+            ref={formRef}
+            clearOnDestroy
+          >
             {handleColumns(
               Array.isArray(formColumns) && formColumns.length
                 ? formColumns

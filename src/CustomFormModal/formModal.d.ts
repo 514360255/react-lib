@@ -77,6 +77,12 @@ interface CustomFormModalProps {
   detailRequest?: (data: any) => any;
 
   /**
+   * 处理modal数据
+   * @param data
+   */
+  handleModalData?: (data: any) => any;
+
+  /**
    * table actionRef
    */
   tableActionRef?: any;

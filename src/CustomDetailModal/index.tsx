@@ -10,8 +10,9 @@ import {
   isEmptyValue,
 } from '@guo514360255/antd-lib/utils/util';
 import { Descriptions, Drawer, Image, Modal, Spin } from 'antd';
-import { isNumber, isString } from 'lodash';
+import isNumber from 'lodash/isNumber';
 import isObject from 'lodash/isObject';
+import isString from 'lodash/isString';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { CustomColumnProps } from '../compontent';
 import './index.less';
