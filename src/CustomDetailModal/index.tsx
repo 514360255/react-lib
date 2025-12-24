@@ -155,6 +155,7 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
                           index,
                         ) || '-'
                       )}
+                      <span>{item.fieldProps?.suffix || ''}</span>
                     </Descriptions.Item>
                   </React.Fragment>
                 );

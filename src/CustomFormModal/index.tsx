@@ -97,7 +97,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
               ? handleModalData(data || {})
               : data || {};
             setFieldValues(newData);
-            formRef.current?.setFieldsValue(formValues || {});
+            formRef.current?.setFieldsValue(newData || {});
             return;
           } catch (e) {
             console.warn(e);
@@ -110,7 +110,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
             ? handleModalData(values || {})
             : values || {};
           setFieldValues(newData);
-          formRef.current?.setFieldsValue(formValues || {});
+          formRef.current?.setFieldsValue(newData || {});
         }, 0);
       },
       getFormRef() {
@@ -218,7 +218,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
           >
             {handleColumns(
               Array.isArray(formColumns) && formColumns.length
-                ? formColumns
+                ? formColumns.filter((item) => !item.hideInForm)
                 : columns || [],
             ).map((item: CustomColumnProps) => {
               const defaultPlaceholder = getPlaceholder(item.type, item.title);
@@ -236,8 +236,9 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
                           >
                             <div className="listGroupContainer">
                               <div className="listGroupContent">
-                                {(formList[item.dataIndex] || []).map(
-                                  (list: any) => {
+                                {(formList[item.dataIndex] || [])
+                                  .filter((item: any) => !item.hideInForm)
+                                  .map((list: any) => {
                                     const placeholder = getPlaceholder(
                                       list.type,
                                       list.title,
@@ -266,8 +267,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
                                         )}
                                       </Form.Item>
                                     );
-                                  },
-                                )}
+                                  })}
                               </div>
                               <span className="listDelIcon">
                                 <DeleteOutlined
