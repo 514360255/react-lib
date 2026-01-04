@@ -109,10 +109,16 @@ interface CustomTableProps {
   updateRequest?: (data: any) => any;
 
   /**
-   * 处理弹窗的数据
+   * 处理form弹窗的数据
    * @param data
    */
   handleModalData?: (data: any) => any;
+
+  /**
+   * 处理详情弹窗的数据
+   * @param data
+   */
+  handleDetailData?: (data: any) => any;
 
   /**
    * 数据源

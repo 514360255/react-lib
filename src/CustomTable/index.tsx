@@ -48,6 +48,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       updateRequest,
       updateStateRequest,
       handleModalData,
+      handleDetailData,
       formProps,
       detailProps,
       ...tableProps
@@ -341,6 +342,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           title={title}
           ref={detailRef}
           detailRequest={detailRequest}
+          handleDetailData={handleDetailData}
           columns={columns.filter(
             (item: CustomColumnProps) =>
               !item.hideInDetail &&
