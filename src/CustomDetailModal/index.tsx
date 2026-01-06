@@ -87,13 +87,14 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
         const result: string[] = [];
         if (Object.keys(valuesEnum).length > 0 && isObject(valuesEnum)) {
           values.forEach((item: any) => {
-            result.push((valuesEnum as any)[item]?.text);
+            result.push((valuesEnum as any)[item]?.text || value);
           });
           return result.join(',');
         } else if (Array.isArray(options) && options.length > 0) {
           values.forEach((item: any) => {
             const { label } = findTreeNodeByKey(options, item) || {};
-            result.push(label);
+            console.log(label, '...label...');
+            result.push(label || value);
           });
           return result.join(',');
         }

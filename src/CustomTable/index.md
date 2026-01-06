@@ -117,8 +117,9 @@ export default () => {
         detailRequest={() => {
           return {
             id: '1',
-            filedName: 1,
-            filedName1: '字段名1',
+            checkbox: 3,
+            fieldName: 1,
+            fieldName1: '字段名1',
             fieldName2: [
               'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
               'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg'
