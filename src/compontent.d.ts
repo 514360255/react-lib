@@ -4,10 +4,10 @@
  * @Description:
  */
 
-import { ProColumns } from '@ant-design/pro-table';
-import { Rules } from '@rc-component/async-validator';
-import { ImgCropProps } from 'antd-img-crop';
-import { ReactNode } from 'react';
+import type { ProColumns } from '@ant-design/pro-table';
+import type { Rules } from '@rc-component/async-validator';
+import type { ButtonProps } from 'antd';
+import type { ImgCropProps } from 'antd-img-crop';
 
 interface CustomColumnProps extends ProColumns {
   /**
@@ -82,5 +82,7 @@ interface CustomColumnProps extends ProColumns {
   /**
    * 操作按钮
    */
-  buttons?: (data: { [key: string]: any }) => ReactNode;
+  buttons?: (data: {
+    [key: string]: any;
+  }) => any | (ButtonProps & { text: string; order: number }[]);
 }

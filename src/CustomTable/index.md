@@ -71,7 +71,21 @@ export default () => {
         {id: 2, title: '字段名1', dataIndex: 'fieldName1', type: 'select', fieldProps: {}},
         {id: 3, title: '字段名2', dataIndex: 'fieldName2', type: 'upload', hideInTable: true},
         {id: 5, title: '字段名3', dataIndex: 'fieldName3', type: 'upload', hideInTable: true},
-        {id: 4, title: '操作', valueType: 'option'}
+        {
+          id: 4, 
+          title: '操作', 
+          valueType: 'option',
+          buttons: [
+            {
+              text: '确定', 
+              type: 'primary',
+              order: 1,
+              onClick: (record) => {
+                console.log(record);
+              }
+            }
+          ]
+        }
       ])
     }, 2000)
   }, []);
@@ -245,10 +259,10 @@ export default () => {
     {
       title: '操作',
       dataIndex: 'operation',
-      width: 220,
+      width: 300,
       buttons: (record) => {
         const result = [];
-        if (record.status === 3) {
+        if (record.status) {
           result.push(
             ...[
               <Button variant="link" key="ajust" color="orange">
@@ -307,6 +321,7 @@ export default () => {
         status,
         remaining,
         area,
+        isActive: randomInt(0, 1),
         recentMaintenanceTime: dayjs().subtract(10, 'day').format('YYYY-MM-DD HH:mm:ss'),
         createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         createdBy: '系统管理员',
@@ -318,8 +333,7 @@ export default () => {
   return (
     <CustomTable
       isUpdate={false}
-      isUpdateState={false}
-      isDelete={false}
+      isUpdateState={true}
       title="无人车辆"
       createText="新增车辆"
       ref={tableRef}

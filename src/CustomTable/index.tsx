@@ -9,9 +9,11 @@ import { ProTable } from '@ant-design/pro-table';
 import { ActionType } from '@ant-design/pro-table/es/typing';
 import CustomFormModal from '@guo514360255/antd-lib/CustomFormModal';
 import { CustomTableProps } from '@guo514360255/antd-lib/CustomTable/table';
+import { isEmptyValue } from '@guo514360255/antd-lib/utils/util';
 import { Button, message, Popconfirm, Progress } from 'antd';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
+import isFunction from 'lodash/isFunction';
 import React, {
   forwardRef,
   useEffect,
@@ -62,7 +64,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     const [scrollBar, setScrollBar] = useState(false);
     const tableContainerRef = useRef<HTMLDivElement>(null);
 
-    const delEvent = async (id: string) => {
+    const delEvent = async ({ id }: { id: string }) => {
       setLoading(true);
       try {
         if (deleteRequest) {
@@ -161,7 +163,53 @@ const CustomTable = forwardRef<any, CustomTableProps>(
         };
       }
 
-      // 操作列
+      const getButtons = (record: any, buts: any[] = []) => [
+        {
+          text: '详情',
+          type: 'link',
+          // @ts-ignore
+          onClick: detailRef.current?.open,
+          isShow: isDetail,
+          order: 10,
+        },
+        {
+          text: '编辑',
+          type: 'link',
+          onClick: openModal,
+          isShow: isUpdate,
+          order: 20,
+        },
+        {
+          text: '删除',
+          type: 'link',
+          onClick: delEvent,
+          isShow: isDelete,
+          isConfirm: true,
+          danger: true,
+          msg: '确定删除当前数据？',
+          order: 30,
+        },
+        {
+          text: record.isActive === 0 ? '禁用' : '启用',
+          type: 'link',
+          onClick: updateState,
+          isShow: isUpdateState,
+          danger: record.isActive === 0,
+          isConfirm: true,
+          msg: `确定要${record.isActive === 0 ? '启用' : '禁用'}该数据吗？`,
+          order: 40,
+        },
+        ...buts,
+      ];
+
+      /**
+       * 操作列
+       * 详情：默认显示
+       * 编辑：默认显示
+       * 删除：默认显示
+       * 启用/禁用：默认不显示
+       * buttons：为函数
+       */
       const operation: CustomColumnProps | undefined = newColumns?.find(
         (item: CustomColumnProps) =>
           item.dataIndex === 'operation' || item.valueType === 'option',
@@ -176,42 +224,59 @@ const CustomTable = forwardRef<any, CustomTableProps>(
               .length * 65;
         }
         operation.render = (_: any, record: any) => {
+          const buts = Array.isArray(operation.buttons)
+            ? operation.buttons
+            : [];
+          const buttons = getButtons(record, buts)
+            ?.filter((item) => item.isShow || isEmptyValue(item.isShow))
+            ?.sort((prev, next) => prev?.order - next?.order);
+
           return (
             <div style={{ display: 'flex' }}>
-              {isDetail && (
-                <Button
-                  type="link"
-                  // @ts-ignore
-                  onClick={() => detailRef.current?.open(record)}
-                >
-                  详情
-                </Button>
+              {buttons?.map(
+                (
+                  {
+                    text,
+                    msg,
+                    isConfirm,
+                    onClick,
+                    danger,
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    isShow,
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    order,
+                    ...item
+                  },
+                  index,
+                ) => {
+                  if (isConfirm) {
+                    return (
+                      <Popconfirm
+                        key={index}
+                        title={msg}
+                        onConfirm={() => onClick && onClick(record)}
+                        {...(item || {})}
+                      >
+                        <Button type="link" danger={danger} {...item}>
+                          {text}
+                        </Button>
+                      </Popconfirm>
+                    );
+                  }
+                  return (
+                    <Button
+                      key={index}
+                      type="link"
+                      onClick={() => onClick && onClick(record)}
+                      danger={danger}
+                      {...item}
+                    >
+                      {text}
+                    </Button>
+                  );
+                },
               )}
-              {isUpdate && (
-                <Button type="link" onClick={() => openModal(record)}>
-                  编辑
-                </Button>
-              )}
-              {isDelete && (
-                <Popconfirm
-                  title="确定删除当前数据？"
-                  onConfirm={() => delEvent(record.id)}
-                >
-                  <Button type="link" danger>
-                    删除
-                  </Button>
-                </Popconfirm>
-              )}
-              {isUpdateState && (
-                <Button
-                  type="link"
-                  danger={record.isActive === 1}
-                  onClick={() => updateState(record)}
-                >
-                  {record.isActive === 0 ? '启用' : '禁用'}
-                </Button>
-              )}
-              {operation.buttons && operation.buttons(record)}
+              {isFunction(operation.buttons) && operation.buttons(record)}
             </div>
           );
         };
@@ -223,6 +288,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       );
     };
 
+    // 控制操作列宽度
     const getAntTableContainer = () => {
       const tableContainer = tableContainerRef.current;
       const tableBody = tableContainer?.querySelector('.ant-table-body');
