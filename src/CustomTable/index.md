@@ -5,14 +5,15 @@
  * title: 基础用法
  */
 import { useState, useEffect, useRef } from 'react';
-import { CustomTable, useFormData } from '@guo514360255/antd-lib';
+import { CustomTable, useFormData, CustomTag } from '@guo514360255/antd-lib';
 import { Button } from 'antd'
 
 export default () => {
   const tableRef = useRef();
   const { setFieldValue } = useFormData();
   const dataSource = [{
-    id: '1', 
+    id: '1',
+    checkbox: 1,
     filedName: '字段名', 
     filedName1: '字段名1',
     fieldName2: [
@@ -40,12 +41,13 @@ export default () => {
           dataIndex: 'checkbox',
           type: 'checkbox',
           valueEnum: {
-            0: { text: '否' },
-            1: { text: '是' },
+            0: { text: '否', },
+            1: { text: '是', color: '#ff0000' },
           },
           fieldProps: {
             options: [{label: '男', value: 1}],
-          }
+          },
+          render: (_, { checkbox }, __, ___, column) => <CustomTag value={ checkbox } valueEnum={ column.valueEnum } />
         },
         {
           id: 1, 
@@ -124,7 +126,7 @@ export default () => {
  * title: 基础用法
  */
 import { useState, useEffect, useRef } from 'react';
-import { CustomTable, randomInt } from '@guo514360255/antd-lib';
+import { CustomTable, randomInt, CustomTag } from '@guo514360255/antd-lib';
 import { Button, Tag, Progress } from 'antd';
 import dayjs from 'dayjs';
 
@@ -179,11 +181,8 @@ export default () => {
         6: { text: '异常', color: 'error' },
       },
       required: true,
-      width: 100,
-      render: (_, record, __, ___, column) => {
-        const { color, text } = (column.valueEnum)[record.status] || {};
-        return <Tag color={color}>{text}</Tag>;
-      },
+      width: 160,
+      render: (_, record, __, ___, column) => <CustomTag value={record.status} valueEnum={column.valueEnum} />,
     },
     {
       title: '剩余续航',
@@ -297,7 +296,7 @@ export default () => {
       const vehicleId = `V-${vehicleIdType[randomInt(0, 3)]}-0${randomInt(10, 99)}`;
       const vehicleType = randomInt(1, 4);
       const weightLimit = randomInt(10, 100);
-      const status = randomInt(1, 6);
+      const status = `${randomInt(1, 6)},${randomInt(1, 6)}`;
       const remaining = randomInt(0, 100);
       const area = randomInt(1, 4);
       data.push({
