@@ -116,6 +116,14 @@ const CustomTable = forwardRef<any, CustomTableProps>(
         // @ts-ignore
         return formModalRef?.current?.getFormRef();
       },
+      // pro components table action ref
+      tableActionRef() {
+        return actionRef.current;
+      },
+      // pro components form ref
+      tableFormRef() {
+        return formRef.current;
+      },
     }));
 
     const totalWidth = columns

@@ -126,3 +126,37 @@ export const handleColumnFieldProps = (
     return s;
   });
 };
+
+/**
+ * blob 文件刘处理
+ * @param response 响应结果
+ * @param fileName 文件名
+ * @returns
+ */
+export function downloadFile(response: any, fileName: string) {
+  // 处理返回的文件流
+  const blob = response;
+  if (blob && blob.size === 0) {
+    alert('内容为空，无法下载');
+    return;
+  }
+  // @ts-ignore
+  const link: any = document?.createElement('a');
+
+  // 兼容一下 入参不是 File Blob 类型情况
+  let binaryData = [] as any;
+  binaryData.push(response);
+  // @ts-ignore
+  link.href = window.URL.createObjectURL(new Blob(binaryData));
+  link.download = fileName;
+  // @ts-ignore
+  document.body.appendChild(link);
+  link.click();
+  // @ts-ignore
+  window.setTimeout(function () {
+    // @ts-ignore
+    URL.revokeObjectURL(blob);
+    // @ts-ignore
+    document.body.removeChild(link);
+  }, 0);
+}

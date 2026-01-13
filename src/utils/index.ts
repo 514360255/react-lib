@@ -8,6 +8,7 @@ import RememberPwd from './rememberPwd';
 import {
   capitalizeFirstLetter,
   capitalizeFirstLetters,
+  downloadFile,
   fileTransformBase64,
   findTreeNodeByKey,
   handleColumnFieldProps,
@@ -20,6 +21,7 @@ export {
   buildTree,
   capitalizeFirstLetter,
   capitalizeFirstLetters,
+  downloadFile,
   fileTransformBase64,
   findTreeNodeByKey,
   handleColumnFieldProps,

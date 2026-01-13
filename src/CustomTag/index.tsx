@@ -9,7 +9,7 @@ import { Tag } from 'antd';
 import isObject from 'lodash/isObject';
 import React from 'react';
 
-const CustomTag = ({ value, valueEnum, options }: CustomTagProps) => {
+const CustomTag = ({ value, valueEnum, options }: CustomTagProps): any => {
   // 判空
   if (isEmptyValue(value)) return <>-</>;
 
