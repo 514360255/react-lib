@@ -4,6 +4,9 @@
  * @Description:
  */
 import { valueEnumTransform } from '@guo514360255/antd-lib/utils/util';
+import { IDomEditor, IToolbarConfig } from '@wangeditor/editor';
+import { Editor, Toolbar } from '@wangeditor/editor-for-react';
+import '@wangeditor/editor/dist/css/style.css';
 import {
   Checkbox,
   ColorPicker,
@@ -15,7 +18,7 @@ import {
   TreeSelect,
 } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface FormItemProps {
   value?: UploadFile[];
@@ -35,6 +38,8 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
     color: ColorPicker,
     date: DatePicker,
   };
+  const [editor, setEditor] = useState<IDomEditor | null>(null);
+  const [html, setHtml] = useState(value || '');
 
   const placeholder =
     rest.defaultPlaceholder ||
@@ -43,7 +48,39 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
       : '请选择';
 
   const FieldComponent = comField[rest.type || 'input'];
-  return (
+
+  const toolbarConfig: Partial<IToolbarConfig> = {};
+
+  const editorConfig = {
+    placeholder: '请输入内容...',
+    MENU_CONF: {
+      ...(rest?.fieldProps?.editorConfig || {}),
+    },
+  };
+
+  return rest.type === 'editor' ? (
+    <div style={{ border: '1px solid #cecece' }}>
+      <Toolbar
+        defaultConfig={toolbarConfig}
+        mode="default"
+        editor={editor}
+        {...(rest?.fieldProps?.toolbar || {})}
+      />
+      <Editor
+        defaultConfig={editorConfig}
+        onCreated={setEditor}
+        mode="default"
+        value={html}
+        onChange={(editor) => {
+          const htmlText = editor.getHtml();
+          setHtml(htmlText);
+          onChange?.(htmlText as any);
+        }}
+        style={{ height: '300px' }}
+        {...(rest?.fieldProps?.editor || {})}
+      />
+    </div>
+  ) : (
     <FieldComponent
       value={value}
       onChange={(e: any) =>

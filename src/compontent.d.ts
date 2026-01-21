@@ -26,6 +26,7 @@ interface CustomColumnProps extends ProColumns {
     | 'color'
     | 'date'
     | 'tag'
+    | 'editor'
     | 'list';
 
   /**

@@ -75,6 +75,26 @@ export default () => {
       },
     {title: '上传', dataIndex: 'upload', type: 'upload'},
     {title: '拖拽上传', dataIndex: 'draggerUpload', type: 'upload', fieldProps: { isDragger: true }},
+    {
+      title: '富文本',
+      dataIndex: 'editor',
+      type: 'editor',
+      required: true,
+      fieldProps: {
+        editorConfig: {
+          uploadImage: {
+            fieldName: 'image',
+            meta: {
+              token: 'e5d4743f62ce166b6b0e96f610876b2a'
+            },
+            server: 'https://images.tbifestival.com/api/index.php',
+            customInsert: (res, insertFn) => {
+              insertFn(res.url);
+            }
+          }
+        }
+      }
+    }
   ])
   
   const targetEvent = () => {

@@ -1,6 +1,6 @@
 {
   "name": "@guo514360255/antd-lib",
-  "version": "1.4.37",
+  "version": "1.5.0",
   "description": "react design 5 lib",
   "license": "MIT",
   "module": "dist/index.js",
@@ -46,6 +46,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.28.4",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-react": "^1.0.6",
     "crypto-js": "^4.2.0",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
@@ -53,14 +55,19 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@ant-design/icons": "^6.1.0",
+    "@ant-design/pro-components": "^2.8.10",
+    "@ant-design/pro-table": "^3.x",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@types/crypto-js": "^4.2.2",
     "@types/js-cookie": "^3.0.6",
-    "@types/lodash": "^4.17.20",
+    "@types/lodash": "^4.14.191",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.0",
     "@umijs/lint": "^4.0.0",
+    "antd": "^5.x",
+    "antd-img-crop": "^4.27.0",
     "dumi": "^2.4.13",
     "eslint": "^8.23.0",
     "father": "^4.1.0",
