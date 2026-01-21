@@ -20,6 +20,7 @@ export interface CustomUploadProps {
   imgCrop?: ImgCropProps;
   isCrop?: boolean;
   isDragger?: boolean;
+  isCustomUpload?: boolean;
   children?: React.ReactNode;
   rest?: {
     isDragger?: boolean;
@@ -60,17 +61,22 @@ const CustomUpload = ({
 
   const customRequest = async ({ file }: any) => {
     if (!file) return;
-    if (props && props.maxCount && value.length >= props.maxCount) {
-      messageApi.warning(`最多上传${props.maxCount}个文件`);
+    if (props?.maxCount && value.length >= props?.maxCount) {
+      messageApi.warning(`最多上传${props?.maxCount}个文件`);
       return;
     }
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('biz', props?.biz);
+      let formData;
+      if (!props?.isCustomUpload) {
+        formData = new FormData();
+        formData.append('file', file);
+        formData.append('biz', props?.biz);
+      }
       const request = props?.request;
       if (request) {
-        const { url, originalName, uid }: any = await request(formData);
+        const { url, originalName, uid }: any = await request(
+          !props?.isCustomUpload ? formData : file,
+        );
         const obj: UploadFile = {
           uid: uid,
           name: originalName,

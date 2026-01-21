@@ -62,7 +62,7 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
         if (values.id && detailRequest) {
           await getDetail(values.id);
         } else {
-          setDetail(handleDetailData ? handleDetailData(values) : values);
+          setDetail(handleDetailData ? await handleDetailData(values) : values);
         }
       },
     }));

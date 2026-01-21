@@ -94,7 +94,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
               }
             });
             const newData = handleModalData
-              ? handleModalData(data || {})
+              ? await handleModalData(data || {})
               : data || {};
             setFieldValues(newData);
             formRef.current?.setFieldsValue(newData || {});
@@ -105,9 +105,9 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
             setDetailLoading(false);
           }
         }
-        setTimeout(() => {
+        setTimeout(async () => {
           const newData = handleModalData
-            ? handleModalData(values || {})
+            ? await handleModalData(values || {})
             : values || {};
           setFieldValues(newData);
           formRef.current?.setFieldsValue(newData || {});

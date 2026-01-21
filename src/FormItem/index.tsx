@@ -4,7 +4,16 @@
  * @Description:
  */
 import { valueEnumTransform } from '@guo514360255/antd-lib/utils/util';
-import { Checkbox, Input, InputNumber, Radio, Select, TreeSelect } from 'antd';
+import {
+  Checkbox,
+  ColorPicker,
+  DatePicker,
+  Input,
+  InputNumber,
+  Radio,
+  Select,
+  TreeSelect,
+} from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import React from 'react';
 
@@ -23,6 +32,8 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
     treeSelect: TreeSelect,
     textArea: Input.TextArea,
     checkbox: Checkbox.Group,
+    color: ColorPicker,
+    date: DatePicker,
   };
 
   const placeholder =
@@ -37,7 +48,9 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
       value={value}
       onChange={(e: any) =>
         onChange?.(
-          ['treeSelect', 'select', 'checkbox'].includes(rest.type as string)
+          ['treeSelect', 'select', 'checkbox', 'color', 'date'].includes(
+            rest.type as string,
+          )
             ? e
             : !rest.type ||
               ['input', 'inputNumber'].includes(rest.type as string)
@@ -51,7 +64,7 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
       {...(['select'].includes(rest.type as string)
         ? { showSearch: true, optionFilterProp: 'label' }
         : {})}
-      style={{ width: '100%' }}
+      style={{ width: ['color'].includes(rest.type) ? '' : '100%' }}
       {...(['radio', 'select'].includes(rest.type as string)
         ? { options: valueEnumTransform(rest.valueEnum, value) }
         : {})}

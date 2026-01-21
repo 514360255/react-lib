@@ -23,6 +23,8 @@ interface CustomColumnProps extends ProColumns {
     | 'textArea'
     | 'upload'
     | 'progress'
+    | 'color'
+    | 'date'
     | 'tag'
     | 'list';
 
@@ -65,6 +67,11 @@ interface CustomColumnProps extends ProColumns {
      * 是否裁切图片
      */
     isCrop?: boolean;
+
+    /**
+     * 是否自定义上传
+     */
+    isCustomUpload?: boolean;
 
     [key: string]: any;
   };

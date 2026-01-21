@@ -57,12 +57,28 @@ export default () => {
     {title: '下拉框', dataIndex: 'select', type: 'select', fieldProps: { options }},
     {title: '属性下拉框', dataIndex: 'treeSelect', type: 'treeSelect', fieldProps: { options }},
     {title: '文本域', dataIndex: 'textArea', type: 'textArea', fieldProps: { rows: 5 }},
+    {
+      title: '颜色', 
+      dataIndex: 'color', 
+      type: 'color',
+      fieldProps: {
+        format: 'hex'
+      }
+    },
+    {
+      title: '日期', 
+      dataIndex: 'date', 
+      type: 'date', 
+      fieldProps: {
+        picker: 'datetime'
+      }
+      },
     {title: '上传', dataIndex: 'upload', type: 'upload'},
     {title: '拖拽上传', dataIndex: 'draggerUpload', type: 'upload', fieldProps: { isDragger: true }},
   ])
   
   const targetEvent = () => {
-    modalRef.current?.open({checkbox: [1]});
+    modalRef.current?.open({checkbox: [1], color: '#ff0000'});
   }
   
   return (

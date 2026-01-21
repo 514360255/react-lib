@@ -30,7 +30,7 @@ export const buildTree = (flatData: any[], options: any = {}) => {
 
     if (
       parentId === rootParentValue ||
-      parentId == null ||
+      parentId === null ||
       !map.has(parentId) ||
       parentId === '0'
     ) {
