@@ -18,7 +18,7 @@ import {
   TreeSelect,
 } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface FormItemProps {
   value?: UploadFile[];
@@ -39,7 +39,7 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
     date: DatePicker,
   };
   const [editor, setEditor] = useState<IDomEditor | null>(null);
-  const [html, setHtml] = useState(value || '');
+  const [html, setHtml] = useState<any>(value || '');
 
   const placeholder =
     rest.defaultPlaceholder ||
@@ -58,6 +58,12 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
     },
   };
 
+  useEffect(() => {
+    if (rest.type === 'editor') {
+      editor?.setHtml(value as any);
+    }
+  }, [value]);
+
   return rest.type === 'editor' ? (
     <div style={{ border: '1px solid #cecece' }}>
       <Toolbar
@@ -74,10 +80,8 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
         onChange={(editor) => {
           const htmlText = editor.getHtml();
           setHtml(htmlText);
-          onChange?.(htmlText as any);
         }}
         style={{ height: '300px' }}
-        {...(rest?.fieldProps?.editor || {})}
       />
     </div>
   ) : (

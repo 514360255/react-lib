@@ -98,7 +98,11 @@ export default () => {
   ])
   
   const targetEvent = () => {
-    modalRef.current?.open({checkbox: [1], color: '#ff0000'});
+    modalRef.current?.open({
+      checkbox: [1], 
+      color: '#ff0000', 
+      editor: '<p><img src="https://images.tbifestival.com/i/2/2026/01/21/rb0hgc-2.jpg" alt="" data-href="" style=""/>123123123123123</p>'
+    });
   }
   
   return (
