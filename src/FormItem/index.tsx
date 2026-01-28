@@ -80,6 +80,7 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
         onChange={(editor) => {
           const htmlText = editor.getHtml();
           setHtml(htmlText);
+          onChange?.(htmlText as any);
         }}
         style={{ height: '300px' }}
       />

@@ -12,6 +12,9 @@ export type { CustomTableProps } from './CustomTable/table';
 export { default as CustomScroll } from './CustomScroll';
 export type { CustomScrollProps } from './CustomScroll/scroll';
 
+export { default as CustomForm } from './CustomForm';
+export type { CustomFormProps } from './CustomForm/form';
+
 export { default as CustomTag } from './CustomTag';
 export { default as CustomUpload } from './CustomUpload';
 export { default as DynamicIcon } from './DynamicIcon';
