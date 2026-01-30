@@ -51,6 +51,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       updateStateRequest,
       handleModalData,
       handleDetailData,
+      handleData,
       formProps,
       detailProps,
       ...tableProps
@@ -405,7 +406,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
                     // @ts-ignore
                     onClick={() => openModal({})}
                   >
-                    {createText || '创建'}
+                    {createText || '新增'}
                   </Button>,
                 ]
               : []),
@@ -435,6 +436,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           updateRequest={updateRequest}
           detailRequest={detailRequest}
           handleModalData={handleModalData}
+          handleData={handleData}
           columns={columns.filter(
             (item: CustomColumnProps) =>
               !item.hideInForm &&

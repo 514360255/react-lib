@@ -132,6 +132,8 @@ const CustomForm = forwardRef<any, CustomFormProps>(
                                         },
                                         ...(list.rules || []),
                                       ]}
+                                      {...(list.fieldProps?.formItemProps ||
+                                        {})}
                                     >
                                       {list.type === 'upload' ? (
                                         <CustomUpload {...list} />
@@ -172,6 +174,7 @@ const CustomForm = forwardRef<any, CustomFormProps>(
                   { required: item.required, message: defaultPlaceholder },
                   ...(item.rules || []),
                 ]}
+                {...(item.fieldProps?.formItemProps || {})}
               >
                 {item.type === 'upload' ? (
                   // @ts-ignore

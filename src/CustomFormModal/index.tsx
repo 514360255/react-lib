@@ -82,7 +82,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
         }, 0);
       },
       getFormRef() {
-        return ref;
+        return formRef.current?.getFormRef();
       },
     }));
 

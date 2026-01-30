@@ -40,6 +40,7 @@ const FormItem = ({ value, onChange, ...rest }: FormItemProps) => {
   };
   const [editor, setEditor] = useState<IDomEditor | null>(null);
   const [html, setHtml] = useState<any>(value || '');
+  delete rest.fieldProps?.formItemProps;
 
   const placeholder =
     rest.defaultPlaceholder ||

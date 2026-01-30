@@ -121,6 +121,12 @@ interface CustomTableProps {
   handleDetailData?: (data: any) => any;
 
   /**
+   * 处理提交的数据
+   * @param data
+   */
+  handleData?: (data: any) => any;
+
+  /**
    * 数据源
    */
   dataSource?: { [key: string]: any }[] | null;

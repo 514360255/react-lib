@@ -19,6 +19,9 @@ export default () => {
       dataIndex: 'name', 
       required: true,
       fieldProps: {
+        formItemProps: {
+          hidden: true
+        },
         onChange: (e) => {
           console.log(e.target.value);
           setFieldValue({ name: e.target.value })

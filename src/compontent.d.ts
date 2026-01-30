@@ -74,6 +74,13 @@ interface CustomColumnProps extends ProColumns {
      */
     isCustomUpload?: boolean;
 
+    /**
+     * 表单item参数
+     */
+    formItemProps?: {
+      [key: string]: any;
+    };
+
     [key: string]: any;
   };
 

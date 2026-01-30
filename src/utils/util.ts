@@ -5,6 +5,7 @@
  */
 import { CustomColumnProps } from '@guo514360255/antd-lib/src';
 import { GetProp, UploadProps } from 'antd';
+import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import isFinite from 'lodash/isFinite';
 import isNil from 'lodash/isNil';
@@ -123,7 +124,7 @@ export const handleColumnFieldProps = (
     if (column && column.fieldProps) {
       fn(column);
     }
-    return s;
+    return cloneDeep(s);
   });
 };
 
