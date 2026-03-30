@@ -381,7 +381,7 @@ export default () => {
     }
   }
   
-  return <CustomTable title='标题' request={request} columns={columns} />
+  return <CustomTable title='标题' request={request} columns={columns} isBatchDelete={true} />
 }
 ```
 

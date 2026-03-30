@@ -161,6 +161,12 @@ interface CustomTableProps {
   };
 
   /**
+   * 批量删除接口
+   * @param data
+   */
+  batchDeleteRequest?: (data: any) => any;
+
+  /**
    * 其它参数
    */
   [key: string]: any;

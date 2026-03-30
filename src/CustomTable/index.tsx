@@ -10,7 +10,7 @@ import { ActionType } from '@ant-design/pro-table/es/typing';
 import CustomFormModal from '@guo514360255/antd-lib/CustomFormModal';
 import { CustomTableProps } from '@guo514360255/antd-lib/CustomTable/table';
 import { isEmptyValue } from '@guo514360255/antd-lib/utils/util';
-import { Button, message, Popconfirm, Progress } from 'antd';
+import { Button, message, Popconfirm, Progress, Space } from 'antd';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import isFunction from 'lodash/isFunction';
@@ -49,6 +49,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       saveRequest,
       updateRequest,
       updateStateRequest,
+      batchDeleteRequest,
       handleModalData,
       handleDetailData,
       handleData,
@@ -63,6 +64,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     const [messageApi, messageHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
     const [scrollBar, setScrollBar] = useState(false);
+    const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
     const tableContainerRef = useRef<HTMLDivElement>(null);
 
     const delEvent = async ({ id }: { id: string }) => {
@@ -126,6 +128,29 @@ const CustomTable = forwardRef<any, CustomTableProps>(
         return formRef.current;
       },
     }));
+
+    const batchDelete = async (
+      keys: any[],
+      selectedRows: any[],
+      onCleanSelected: () => void,
+    ) => {
+      if (!isFunction(batchDeleteRequest)) {
+        messageApi.error('批量删除接口未正确传入');
+        return;
+      }
+      setLoading(true);
+      try {
+        await batchDeleteRequest(keys, selectedRows);
+        messageApi.success('删除成功');
+        setSelectedRowKeys([]);
+        onCleanSelected();
+        actionRef.current?.reload();
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     const totalWidth = columns
       ?.filter((item: any) => !item.hideInTable)
@@ -347,6 +372,45 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           }}
           loading={loading}
           bordered
+          rowSelection={
+            !!batchDeleteRequest
+              ? {
+                  defaultSelectedRowKeys: selectedRowKeys,
+                }
+              : false
+          }
+          tableAlertRender={({ selectedRowKeys, onCleanSelected }) => {
+            if (!batchDeleteRequest) {
+              return false;
+            }
+            return (
+              <Space>
+                <span>
+                  已选 {selectedRowKeys.length} 项
+                  <a style={{ marginInlineStart: 8 }} onClick={onCleanSelected}>
+                    取消选择
+                  </a>
+                </span>
+              </Space>
+            );
+          }}
+          tableAlertOptionRender={({
+            selectedRowKeys,
+            selectedRows,
+            onCleanSelected,
+          }) => {
+            return (
+              <Space size={16}>
+                <a
+                  onClick={() =>
+                    batchDelete(selectedRowKeys, selectedRows, onCleanSelected)
+                  }
+                >
+                  批量删除
+                </a>
+              </Space>
+            );
+          }}
           pagination={{
             showSizeChanger: true,
             showQuickJumper: true,
