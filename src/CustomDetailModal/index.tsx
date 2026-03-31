@@ -56,6 +56,10 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
       }
     };
 
+    const close = () => {
+      setOpen(false);
+    };
+
     useImperativeHandle(ref, () => ({
       async open(values: { [key: string]: any }) {
         setOpen(true);
@@ -65,11 +69,8 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
           setDetail(handleDetailData ? await handleDetailData(values) : values);
         }
       },
+      close,
     }));
-
-    const close = () => {
-      setOpen(false);
-    };
 
     const handleDetailValue = (
       column: CustomColumnProps,

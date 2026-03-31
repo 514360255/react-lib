@@ -48,6 +48,15 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
 
     const Component = modalType[type || 'drawer'];
 
+    const close = () => {
+      setOpen(false);
+      const ref: any = formRef.current?.getFormRef();
+      ref?.resetFields();
+      if (onSubmit) {
+        onSubmit();
+      }
+    };
+
     useImperativeHandle(ref, () => ({
       async open(values: { [key: string]: any }) {
         const ref: any = formRef.current?.getFormRef();
@@ -84,6 +93,7 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       getFormRef() {
         return formRef.current?.getFormRef();
       },
+      close,
     }));
 
     const submitEvent = async () => {
@@ -127,15 +137,6 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
         console.log(e, 'submit request error');
       } finally {
         setLoading(false);
-      }
-    };
-
-    const close = () => {
-      setOpen(false);
-      const ref: any = formRef.current?.getFormRef();
-      ref?.resetFields();
-      if (onSubmit) {
-        onSubmit();
       }
     };
 

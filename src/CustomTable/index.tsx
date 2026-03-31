@@ -60,7 +60,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     const formRef = useRef<ProFormInstance>();
     const actionRef = useRef<ActionType>();
     const detailRef = useRef<ActionType>();
-    const formModalRef = useRef<ActionType>();
+    const formModalRef = useRef<ActionType & { close: () => void }>();
     const [messageApi, messageHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
     const [scrollBar, setScrollBar] = useState(false);
@@ -118,6 +118,10 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       getFormRef() {
         // @ts-ignore
         return formModalRef?.current?.getFormRef();
+      },
+      // close form modal
+      closeFormModal() {
+        formModalRef?.current?.close();
       },
       // pro components table action ref
       tableActionRef() {
