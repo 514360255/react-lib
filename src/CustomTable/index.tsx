@@ -34,6 +34,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       isDetail = true,
       isUpdate = true,
       isCreate = true,
+      isRowSelection = false,
       createText,
       columns,
       rowKey,
@@ -65,6 +66,7 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     const [loading, setLoading] = useState(false);
     const [scrollBar, setScrollBar] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const tableContainerRef = useRef<HTMLDivElement>(null);
 
     const delEvent = async ({ id }: { id: string }) => {
@@ -130,6 +132,10 @@ const CustomTable = forwardRef<any, CustomTableProps>(
       // pro components form ref
       tableFormRef() {
         return formRef.current;
+      },
+      // selected rows
+      getSelection() {
+        return selectedRows;
       },
     }));
 
@@ -377,9 +383,12 @@ const CustomTable = forwardRef<any, CustomTableProps>(
           loading={loading}
           bordered
           rowSelection={
-            !!batchDeleteRequest
+            isRowSelection
               ? {
                   defaultSelectedRowKeys: selectedRowKeys,
+                  onChange: (_, rows) => {
+                    setSelectedRows(rows);
+                  },
                 }
               : false
           }

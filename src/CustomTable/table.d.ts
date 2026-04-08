@@ -38,6 +38,11 @@ interface CustomTableProps {
   isCreate?: boolean;
 
   /**
+   * 是否多选
+   */
+  isRowSelection?: boolean;
+
+  /**
    * 创建按钮文案
    */
   createText?: string;

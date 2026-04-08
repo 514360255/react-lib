@@ -355,11 +355,12 @@ export default () => {
 /**
  * title: request请求
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CustomTable } from '@guo514360255/antd-lib';
+import { Button } from 'antd';
 
 export default () => {
-
+  const tableRef = useRef();
   const [columns, setColumns] = useState([
     {title: '字段名', dataIndex: 'filedName'},
     {title: '字段名1', dataIndex: 'filedName1'},
@@ -381,7 +382,21 @@ export default () => {
     }
   }
   
-  return <CustomTable title='标题' request={request} columns={columns} isBatchDelete={true} />
+  const batchExport = () => {
+    const selection = tableRef.current?.getSelection();
+    console.log(selection);
+  }
+  
+  return (
+    <CustomTable
+      ref={tableRef}
+      title='标题'
+      toolBarRender={[<Button type="primary" onClick={batchExport}>批量导出</Button>]}
+      request={request}
+      columns={columns}
+      isRowSelection
+    />
+  )
 }
 ```
 
