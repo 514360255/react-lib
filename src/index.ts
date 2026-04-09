@@ -15,6 +15,9 @@ export type { CustomScrollProps } from './CustomScroll/scroll';
 export { default as CustomForm } from './CustomForm';
 export type { CustomFormProps } from './CustomForm/form';
 
+export { default as CustomDescriptions } from './CustomDescriptions';
+export type { CustomDescriptionsProps } from './CustomDescriptions/descriptions';
+
 export { default as CustomTag } from './CustomTag';
 export { default as CustomUpload } from './CustomUpload';
 export { default as DynamicIcon } from './DynamicIcon';

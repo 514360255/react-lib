@@ -4,17 +4,10 @@
  * @Description:
  */
 
+import CustomDescriptions from '@guo514360255/antd-lib/CustomDescriptions';
 import { CustomDetailModalProps } from '@guo514360255/antd-lib/CustomDetailModal/detailModal';
-import {
-  findTreeNodeByKey,
-  isEmptyValue,
-} from '@guo514360255/antd-lib/utils/util';
-import { Descriptions, Drawer, Image, Modal, Spin } from 'antd';
-import isNumber from 'lodash/isNumber';
-import isObject from 'lodash/isObject';
-import isString from 'lodash/isString';
+import { Drawer, Modal } from 'antd';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { CustomColumnProps } from '../compontent';
 import './index.less';
 
 const CustomModal = forwardRef<any, CustomDetailModalProps>(
@@ -29,32 +22,13 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
       ...other
     } = props;
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [detail, setDetail] = useState<any>({});
+    const [detail, setDetail] = useState<any>();
     const modalType: any = {
       modal: Modal,
       drawer: Drawer,
     };
 
     const Component = modalType[type || 'drawer'];
-
-    const getDetail = async (id: string | number) => {
-      // 参数验证
-      if (!isString(id) && !isNumber(id)) {
-        console.warn('Invalid id parameter:', id);
-        return;
-      }
-      if (loading) return;
-      setLoading(true);
-      try {
-        const data = await detailRequest(id);
-        setDetail(handleDetailData ? handleDetailData(data) : data);
-      } catch (e) {
-        console.error('Failed to fetch detail:', e);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     const close = () => {
       setOpen(false);
@@ -63,69 +37,10 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
     useImperativeHandle(ref, () => ({
       async open(values: { [key: string]: any }) {
         setOpen(true);
-        if (values.id && detailRequest) {
-          await getDetail(values.id);
-        } else {
-          setDetail(handleDetailData ? await handleDetailData(values) : values);
-        }
+        setDetail(values);
       },
       close,
     }));
-
-    const handleDetailValue = (
-      column: CustomColumnProps,
-      value: any,
-      index: number,
-    ) => {
-      if (isEmptyValue(value)) return value;
-      const { fieldProps, valueEnum } = column;
-      const { options } = fieldProps || {};
-      if (column.render) {
-        return column.render(value, detail, index, {} as any, column as any);
-      } else if (['select', 'radio'].includes(column.type as string)) {
-        const valuesEnum: any = { ...valueEnum };
-        const values = `${value}`.split(',');
-        const result: string[] = [];
-        if (Object.keys(valuesEnum).length > 0 && isObject(valuesEnum)) {
-          values.forEach((item: any) => {
-            result.push((valuesEnum as any)[item]?.text || value);
-          });
-          return result.join(',');
-        } else if (Array.isArray(options) && options.length > 0) {
-          values.forEach((item: any) => {
-            const { label } = findTreeNodeByKey(options, item) || {};
-            console.log(label, '...label...');
-            result.push(label || value);
-          });
-          return result.join(',');
-        }
-        return value;
-      }
-      return value;
-    };
-
-    const DescImage = ({ data }: any) => {
-      if (!data) return data;
-      let list: any[] = data;
-      if (typeof data === 'string') {
-        list = data.split(',');
-      }
-      return (
-        <Image.PreviewGroup>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            {list.map((item: any, index: number) => (
-              <Image
-                key={index}
-                width={100}
-                src={item.url || item}
-                alt={item.name || item}
-                style={{ marginRight: 10 }}
-              />
-            ))}
-          </div>
-        </Image.PreviewGroup>
-      );
-    };
 
     return (
       <>
@@ -137,34 +52,14 @@ const CustomModal = forwardRef<any, CustomDetailModalProps>(
           onClose={close}
           className="detailContainer"
         >
-          <Descriptions column={1} bordered {...(descProps || {})}>
-            {columns
-              ?.filter((item: CustomColumnProps) => !item.hideInDetail)
-              .map((item: CustomColumnProps, index: number) => {
-                return (
-                  <React.Fragment key={item.dataIndex}>
-                    <Descriptions.Item
-                      key={item.dataIndex}
-                      label={`${item.title}`}
-                      {...(item.fieldProps?.descriptionsItemProps || {})}
-                    >
-                      {item.type === 'upload' ? (
-                        <DescImage data={detail[item.dataIndex]} />
-                      ) : (
-                        handleDetailValue(
-                          item,
-                          detail[item.dataIndex],
-                          index,
-                        ) || '-'
-                      )}
-                      <span>{item.fieldProps?.suffix || ''}</span>
-                    </Descriptions.Item>
-                  </React.Fragment>
-                );
-              })}
-          </Descriptions>
+          <CustomDescriptions
+            request={detailRequest}
+            columns={columns}
+            handleDetailData={handleDetailData}
+            values={detail}
+            {...descProps}
+          />
         </Component>
-        <Spin spinning={loading} fullscreen />
       </>
     );
   },
