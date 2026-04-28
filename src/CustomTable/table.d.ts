@@ -6,7 +6,7 @@
 
 import { ProColumns } from '@ant-design/pro-table';
 
-interface CustomTableProps {
+export interface CustomTableProps {
   /**
    * 表格标题
    */

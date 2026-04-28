@@ -5,7 +5,7 @@
  */
 
 import { DeleteOutlined } from '@ant-design/icons';
-import { useFormData } from '@guo514360255/antd-lib/store/useFormData';
+import { useFormData } from '../store/useFormData';
 import { Button, Form } from 'antd';
 import cloneDeep from 'lodash/cloneDeep';
 import { FormRef } from 'rc-field-form';

@@ -9,7 +9,7 @@ import { CustomColumnProps } from '../compontent';
 /**
  * 详情props
  */
-interface CustomDetailModalProps {
+export interface CustomDetailModalProps {
   /**
    * 标题
    */

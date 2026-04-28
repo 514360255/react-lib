@@ -7,9 +7,9 @@
 import { ProFormInstance } from '@ant-design/pro-form';
 import { ProTable } from '@ant-design/pro-table';
 import { ActionType } from '@ant-design/pro-table/es/typing';
-import CustomFormModal from '@guo514360255/antd-lib/CustomFormModal';
-import { CustomTableProps } from '@guo514360255/antd-lib/CustomTable/table';
-import { isEmptyValue } from '@guo514360255/antd-lib/utils/util';
+import CustomFormModal from '../CustomFormModal';
+import type { CustomTableProps } from './table';
+import { isEmptyValue } from '../utils/util';
 import { Button, message, Popconfirm, Progress, Space } from 'antd';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';

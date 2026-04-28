@@ -5,7 +5,7 @@
  */
 import { CustomColumnProps } from '@guo514360255/antd-lib/src';
 
-interface CustomDescriptionsProps {
+export interface CustomDescriptionsProps {
   /**
    * 处理详情数据
    */

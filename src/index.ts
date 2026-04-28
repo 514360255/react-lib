@@ -19,6 +19,7 @@ export { default as CustomDescriptions } from './CustomDescriptions';
 export type { CustomDescriptionsProps } from './CustomDescriptions/descriptions';
 
 export { default as CustomTag } from './CustomTag';
+export type { CustomTagProps } from './CustomTag/tag';
 export { default as CustomUpload } from './CustomUpload';
 export { default as DynamicIcon } from './DynamicIcon';
 export { default as FormItem } from './FormItem';

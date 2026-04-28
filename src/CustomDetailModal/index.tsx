@@ -4,8 +4,8 @@
  * @Description:
  */
 
-import CustomDescriptions from '@guo514360255/antd-lib/CustomDescriptions';
-import { CustomDetailModalProps } from '@guo514360255/antd-lib/CustomDetailModal/detailModal';
+import CustomDescriptions from '../CustomDescriptions';
+import type { CustomDetailModalProps } from './detailModal';
 import { Drawer, Modal } from 'antd';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import './index.less';

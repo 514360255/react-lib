@@ -3,8 +3,8 @@
  * @Date: 2025/11/11
  * @Description:
  */
-import type { CustomTagProps } from '@guo514360255/antd-lib/CustomTag/tag';
-import { isEmptyValue } from '@guo514360255/antd-lib/utils/util';
+import type { CustomTagProps } from './tag';
+import { isEmptyValue } from '../utils/util';
 import { Tag } from 'antd';
 import isObject from 'lodash/isObject';
 import React from 'react';

@@ -7,7 +7,7 @@ import { InboxOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   fileTransformBase64,
   type FileType,
-} from '@guo514360255/antd-lib/utils/util';
+} from '../utils/util';
 import { Image, message, Upload, UploadProps } from 'antd';
 import ImgCrop, { ImgCropProps } from 'antd-img-crop';
 import type { UploadFile } from 'antd/es/upload/interface';

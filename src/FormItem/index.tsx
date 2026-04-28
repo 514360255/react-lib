@@ -3,7 +3,7 @@
  * @Date: 2025/9/15
  * @Description:
  */
-import { valueEnumTransform } from '@guo514360255/antd-lib/utils/util';
+import { valueEnumTransform } from '../utils/util';
 import { IDomEditor, IToolbarConfig } from '@wangeditor/editor';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import '@wangeditor/editor/dist/css/style.css';

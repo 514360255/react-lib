@@ -3,7 +3,7 @@
  * @Date: 2026/1/9
  * @Description:
  */
-import type { CustomScrollProps } from '@guo514360255/antd-lib/CustomScroll/scroll';
+import type { CustomScrollProps } from './scroll';
 import React, { useEffect } from 'react';
 import './index.less';
 import Item from './item';

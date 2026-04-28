@@ -6,7 +6,7 @@
 
 import { CustomColumnProps } from '@guo514360255/antd-lib/src';
 
-interface CustomFormProps {
+export interface CustomFormProps {
   /**
    * 表单字段
    */

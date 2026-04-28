@@ -9,7 +9,7 @@ import type { Rules } from '@rc-component/async-validator';
 import type { ButtonProps } from 'antd';
 import type { ImgCropProps } from 'antd-img-crop';
 
-interface CustomColumnProps extends ProColumns {
+export interface CustomColumnProps extends ProColumns {
   /**
    * 字段类型
    */

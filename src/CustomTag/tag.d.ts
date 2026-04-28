@@ -6,7 +6,7 @@
 
 import type { TagProps } from 'antd';
 
-interface CustomTagProps {
+export interface CustomTagProps {
   /**
    * 标签名称
    */

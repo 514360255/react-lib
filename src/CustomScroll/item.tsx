@@ -4,7 +4,7 @@
  * @Description:
  */
 
-import type { CustomScrollItemProps } from '@guo514360255/antd-lib/CustomScroll/scrollItem';
+import type { CustomScrollItemProps } from './scrollItem';
 import React from 'react';
 
 const Item = (props: CustomScrollItemProps) => {

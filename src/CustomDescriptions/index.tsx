@@ -1,13 +1,10 @@
-import {
-  findTreeNodeByKey,
-  isEmptyValue,
-} from '@guo514360255/antd-lib/utils/util';
 import { Descriptions, Image, Spin } from 'antd';
 import isNumber from 'lodash/isNumber';
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
 import React, { useEffect, useState } from 'react';
 import { CustomColumnProps } from '../compontent';
+import { findTreeNodeByKey, isEmptyValue } from '../utils/util';
 import type { CustomDescriptionsProps } from './descriptions';
 
 /*
@@ -47,7 +44,6 @@ const CustomDescriptions = ({
       } else if (Array.isArray(options) && options.length > 0) {
         values.forEach((item: any) => {
           const { label } = findTreeNodeByKey(options, item) || {};
-          console.log(label, '...label...');
           result.push(label || value);
         });
         return result.join(',');
