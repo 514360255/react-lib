@@ -7,9 +7,6 @@
 import { ProFormInstance } from '@ant-design/pro-form';
 import { ProTable } from '@ant-design/pro-table';
 import { ActionType } from '@ant-design/pro-table/es/typing';
-import CustomFormModal from '../CustomFormModal';
-import type { CustomTableProps } from './table';
-import { isEmptyValue } from '../utils/util';
 import { Button, message, Popconfirm, Progress, Space } from 'antd';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
@@ -23,7 +20,10 @@ import React, {
 } from 'react';
 import type { CustomColumnProps } from '../compontent';
 import CustomDetailModal from '../CustomDetailModal';
+import CustomFormModal from '../CustomFormModal';
+import { isEmptyValue } from '../utils/util';
 import './index.less';
+import type { CustomTableProps } from './table';
 
 const CustomTable = forwardRef<any, CustomTableProps>(
   (props: Omit<CustomTableProps, 'ref'>, ref) => {
@@ -69,11 +69,11 @@ const CustomTable = forwardRef<any, CustomTableProps>(
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const tableContainerRef = useRef<HTMLDivElement>(null);
 
-    const delEvent = async ({ id }: { id: string }) => {
+    const delEvent = async (values: any) => {
       setLoading(true);
       try {
         if (deleteRequest) {
-          await deleteRequest(id);
+          await deleteRequest(values[rowKey || 'id']);
           messageApi.success('删除成功');
           setTimeout(() => {
             actionRef.current?.reload();
