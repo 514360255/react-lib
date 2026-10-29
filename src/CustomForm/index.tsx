@@ -14,6 +14,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
+  useState,
 } from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import type { CustomColumnProps } from '../compontent';
@@ -22,11 +23,24 @@ import FormItem from '../FormItem';
 import type { CustomFormProps } from './form';
 import './index.less';
 
+/**
+ * 字段重建包裹组件
+ * 用于在 setFieldsValue 无法触发 Form.List 子字段视图更新时，
+ * 通过改变 key 强制子组件重建，从 store 读取最新值。
+ */
+const FieldResetWrapper = ({ children, value, onChange }: any) => {
+  return React.cloneElement(
+    Array.isArray(children) ? children[0] : children,
+    { value, onChange },
+  );
+};
+
 const CustomForm = forwardRef<any, CustomFormProps>(
   (props: Omit<CustomFormProps, 'ref'>, ref) => {
     const { columns, formList = {}, formKey, formColumns } = props;
     const { formValues, setFieldValues } = useFormData();
     const formRef: React.LegacyRef<FormRef> | undefined = useRef<any>();
+    const [resetKeys, setResetKeys] = useState<Record<string, number>>({});
     const placeholder: any = {
       input: '输入',
       upload: '上传',
@@ -66,6 +80,16 @@ const CustomForm = forwardRef<any, CustomFormProps>(
       },
       getFormRef() {
         return formRef.current;
+      },
+      /**
+       * 强制重建指定字段（通过改变 key 触发组件重新挂载）
+       * 用于 setFieldsValue 无法触发 Form.List 子字段视图更新的场景
+       */
+      resetField(fieldPath: string) {
+        setResetKeys((prev) => ({
+          ...prev,
+          [fieldPath]: (prev[fieldPath] || 0) + 1,
+        }));
       },
     }));
 
@@ -119,11 +143,24 @@ const CustomForm = forwardRef<any, CustomFormProps>(
                                     list.type,
                                     list.title,
                                   );
+                                  // 包装 fieldProps.onChange，注入当前 list 索引（统一作为第 2 个参数）
+                                  const wrappedList = { ...list };
+                                  if (wrappedList.fieldProps?.onChange) {
+                                    const originalOnChange = wrappedList.fieldProps.onChange;
+                                    wrappedList.fieldProps = {
+                                      ...wrappedList.fieldProps,
+                                      onChange: (e: any, ...rest: any[]) => {
+                                        originalOnChange(e, { fieldIndex: field.name }, ...rest);
+                                      },
+                                    };
+                                  }
+                                  const fieldResetKey =
+                                    resetKeys[`${field.name}.${list.dataIndex}`] || 0;
                                   return (
                                     <Form.Item
                                       name={[field.name, list.dataIndex]}
                                       label={list.title}
-                                      key={list.dataIndex}
+                                      key={`${field.name}.${list.dataIndex}`}
                                       labelAlign="right"
                                       rules={[
                                         {
@@ -135,14 +172,16 @@ const CustomForm = forwardRef<any, CustomFormProps>(
                                       {...(list.fieldProps?.formItemProps ||
                                         {})}
                                     >
-                                      {list.type === 'upload' ? (
-                                        <CustomUpload {...list} />
-                                      ) : (
-                                        <FormItem
-                                          {...list}
-                                          defaultPlaceholder={placeholder}
-                                        />
-                                      )}
+                                      <FieldResetWrapper key={fieldResetKey}>
+                                        {list.type === 'upload' ? (
+                                          <CustomUpload {...list} />
+                                        ) : (
+                                          <FormItem
+                                            {...wrappedList}
+                                            defaultPlaceholder={placeholder}
+                                          />
+                                        )}
+                                      </FieldResetWrapper>
                                     </Form.Item>
                                   );
                                 })}

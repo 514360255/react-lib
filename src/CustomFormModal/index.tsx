@@ -93,6 +93,9 @@ const CustomFormModal = forwardRef<any, CustomFormModalProps>(
       getFormRef() {
         return formRef.current?.getFormRef();
       },
+      resetField(fieldPath: string) {
+        formRef.current?.resetField(fieldPath);
+      },
       close,
     }));
 

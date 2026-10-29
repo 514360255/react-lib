@@ -119,7 +119,7 @@ export default () => {
  * title: group分组的表单
  */
 import { useRef, useState } from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { CustomModal } from '@guo514360255/antd-lib';
 
 export default () => {
@@ -141,6 +141,31 @@ export default () => {
     list: [
       {title: '学历一', dataIndex: 'x1'},
       {title: '学历二', dataIndex: 'x2'},
+      {
+        title: '学历三', 
+        dataIndex: 'x3', 
+        type: 'select', 
+        valueType: 'select', 
+        fieldProps: {
+            options: [{label: '1', value: '1'}, {label: '2', value: '2'}],
+            onChange: (val, { fieldIndex }) => {
+              if (val === undefined || val === null) return;
+              const key = 'x3'
+              const formRef = modalRef.current.getFormRef();
+              const { list: listData } = formRef?.getFieldsValue();
+              // 检查是否有其他分组项的 x3 值与当前选中值重复
+              if (listData.some((item, idx) => idx !== fieldIndex && item[key] === val)) {
+                message.warning('学历三的值重复了，请重新选择');
+                // 更新表单 store 中的值
+                // const newList = [...listData];
+                listData[fieldIndex] = { ...listData[fieldIndex], x3: undefined };
+                formRef?.setFieldsValue({ list: listData });
+                // 强制重建该字段的视图，解决 Form.List 子字段不响应 setFieldsValue 的问题
+                modalRef.current?.resetField(`${fieldIndex}.${key}`);
+              }
+            }
+        }
+        },
     ]
   }
   
